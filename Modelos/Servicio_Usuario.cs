@@ -14,6 +14,14 @@ namespace ViajePlusBDAPI.Modelos
         [ForeignKey("Servicio")]
         public int? id_servicio { get; set; }
 
+        [Required]
+        [StringLength(30)]
+        public double costo {  get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string destino { get; set; }
+
         public virtual Usuario? Usuario { get; set; }
         public virtual Servicio? Servicio { get; set; }
     }
