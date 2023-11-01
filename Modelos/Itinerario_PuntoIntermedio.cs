@@ -9,10 +9,10 @@ namespace ViajePlusBDAPI.Modelos
         public int id { get; set; }
 
         [ForeignKey("Itinerario")]
-        public int id_itinerario { get; set; }
+        public int? id_itinerario { get; set; }
 
         [ForeignKey("PuntoIntermedio")]
-        public int id_puntoIntermedio { get; set; }
+        public int? id_puntoIntermedio { get; set; }
 
         public virtual Itinerario? Itinerario { get; set; }
         public virtual PuntoIntermedio? PuntoIntermedio { get; set; }

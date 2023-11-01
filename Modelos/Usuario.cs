@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ViajePlusBDAPI.Modelos
 {
-    public class Cliente
+    public class Usuario
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -14,10 +14,6 @@ namespace ViajePlusBDAPI.Modelos
         [StringLength(100)]
         public string nombreCompleto { get; set; }
 
-        [Required]
-        [StringLength(100)]
-        [EmailAddress]
-        public string correo { get; set; }
 
         [Required]
         [StringLength(20)]
@@ -28,11 +24,20 @@ namespace ViajePlusBDAPI.Modelos
         public string direccion { get; set; }
 
         [Required]
-        [StringLength(64)]
-        public string contraseña { get; set; }
+        [StringLength(100)]
+        [EmailAddress]
+        public string correo { get; set; }
 
         [Required]
         [StringLength(15)]
         public string telefono { get; set; }
+
+        [Required]
+        [StringLength(30)]
+        public string tipo_usuario { get; set; }
+
+        [Required]
+        [StringLength(64)]
+        public string contraseña { get; set; }
     }
 }
