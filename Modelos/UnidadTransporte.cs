@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ViajePlusBDAPI.Modelos
 {
@@ -15,11 +16,9 @@ namespace ViajePlusBDAPI.Modelos
         [StringLength(50)]
         public string categoria { get; set; }
 
-        [Required]
-        [StringLength(20)]
         public int asientos { get; set; }
 
-
-
+        [JsonIgnore]
+        public ICollection<Servicio>? Servicios { get; set; }
     }
 }

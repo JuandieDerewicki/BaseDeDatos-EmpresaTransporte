@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ViajePlusBDAPI.Modelos
 {
@@ -14,5 +15,11 @@ namespace ViajePlusBDAPI.Modelos
         [Required]
         [StringLength(30)]
         public string ciudad_destino {  get; set; }
+
+        [JsonIgnore]
+        public ICollection<Servicio>? Servicios { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Itinerario_PuntoIntermedio>? Itinerario_PuntoIntermedios { get; set; }
     }
 }

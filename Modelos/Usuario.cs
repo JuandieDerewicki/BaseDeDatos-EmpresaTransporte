@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ViajePlusBDAPI.Modelos
 {
@@ -39,5 +40,8 @@ namespace ViajePlusBDAPI.Modelos
         [Required]
         [StringLength(64)]
         public string contraseña { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Servicio_Usuario>? Servicio_Usuarios { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ViajePlusBDAPI.Modelos
 {
@@ -23,9 +24,6 @@ namespace ViajePlusBDAPI.Modelos
         [Required]
         [StringLength(50)]
         public string? tipo_servicio { get; set; }
-
-        [Required]
-        [StringLength(100)]
         public int disponibilidad { get; set; }
 
         [ForeignKey("Itinerario")]
@@ -35,5 +33,8 @@ namespace ViajePlusBDAPI.Modelos
         [ForeignKey("UnidadTransporte")]
         public int? id_unidadTransporte { get; set; }
         public virtual UnidadTransporte? UnidadTransporte { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Servicio_Usuario>? Servicio_Usuarios { get; set; }
     }
 }
