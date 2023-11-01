@@ -1,4 +1,4 @@
-﻿namespace ViajePlusBDAPI.Clases
+﻿namespace ViajePlusBDAPI.Modelos
 {
     public class Itinerario
     {
