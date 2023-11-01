@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using ViajePlusBDAPI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,11 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 // Se obtiene la cadena de conexion a la BD desde la config de la aplicacion, mientras la cadena se almccena en el appsetings .json y se recupera aca para configurar la BD
-//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); // Estamos compartiendo la cadena de conexion a toda la API
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); // Estamos compartiendo la cadena de conexion a toda la API
 
 //// Luego se configura EF para utilizar la cadena de conexion especificada para establecer una conexion a la BD SQL Server
-//builder.Services.AddDbContext<MiDbContext>(options =>
-//options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<MiDbContext>(options =>
+options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
