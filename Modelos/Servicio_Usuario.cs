@@ -9,7 +9,7 @@ namespace ViajePlusBDAPI.Modelos
         public int id { get; set; }
 
         [ForeignKey("Usuario")]
-        public int? dni_usuario { get; set; }
+        public string? dni_usuario { get; set; }
 
         [ForeignKey("Servicio")]
         public int? id_servicio { get; set; }
