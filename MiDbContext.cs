@@ -22,24 +22,29 @@ namespace ViajePlusBDAPI
             modelBuilder.Entity<Itinerario_PuntoIntermedio>()
                 .HasOne(ip => ip.Itinerario)
                 .WithMany(i => i.Itinerario_PuntoIntermedios)
-                .HasForeignKey(ip => ip.id_itinerario);
+                .HasForeignKey(ip => ip.id_itinerario)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             modelBuilder.Entity<Itinerario_PuntoIntermedio>()
                 .HasOne(ip => ip.PuntoIntermedio)
                 .WithMany(p => p.Itinerario_PuntoIntermedios)
-                .HasForeignKey(ip => ip.id_puntoIntermedio);
+                .HasForeignKey(ip => ip.id_puntoIntermedio)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Definir la relación 1:N entre Itinerario y Servicio
             modelBuilder.Entity<Servicio>()
                 .HasOne(s => s.Itinerario)
                 .WithMany(i => i.Servicios)
-                .HasForeignKey(s => s.id_itinerario);
+                .HasForeignKey(s => s.id_itinerario)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Definir la relación N:1 entre UnidadTransporte y Servicio
             modelBuilder.Entity<Servicio>()
                 .HasOne(s => s.UnidadTransporte)
                 .WithMany(u => u.Servicios)
-                .HasForeignKey(s => s.id_unidadTransporte);
+                .HasForeignKey(s => s.id_unidadTransporte)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Definir la relación M:N entre Servicio y Usuario a través de Servicio_Usuario
             modelBuilder.Entity<Servicio_Usuario>()
@@ -48,19 +53,33 @@ namespace ViajePlusBDAPI
             modelBuilder.Entity<Servicio_Usuario>()
                 .HasOne(su => su.Servicio)
                 .WithMany(s => s.Servicio_Usuarios)
-                .HasForeignKey(su => su.id_servicio);
+                .HasForeignKey(su => su.id_servicio)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Servicio_Usuario>()
                 .HasOne(su => su.Usuario)
                 .WithMany(u => u.Servicio_Usuarios)
-                .HasForeignKey(su => su.dni_usuario);
+                .HasForeignKey(su => su.dni_usuario)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Servicio_Usuario>()
                   .HasOne(su => su.PuntoIntermedio)
                   .WithOne()
-                  .HasForeignKey<Servicio_Usuario>(su => su.id_puntoIntermedio);
-                  //.OnDelete(DeleteBehavior.Restrict);
-                  //.OnDelete(DeleteBehavior.Cascade);
+                  .HasForeignKey<Servicio_Usuario>(su => su.id_puntoIntermedio)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            /*
+           La eliminación por cascada se aplica a:
+
+           Entre Itinerario y Servicio: Si eliminamos un itinerario, todos los servicios asociados a ese itinerario se eliminan también
+           Entre Servicio y UnidadTransporte: Si eliminamos una unidad de transporte, todos los servicios asociados a esa unidad de transporte también deberían eliminarse también.
+           Entre Servicio_Usuario y Servicio: Si eliminamos un servicio, todas las reservas de ese servicio también deberían eliminarse también.
+
+           La eliminación por cascada no debería aplicarse:
+           Entre Itinerario y PuntoIntermedio: Si eliminamos un punto intermedio, no debería eliminarse el itinerario al que pertenece.
+           Entre Servicio_Usuario y Usuario: Si eliminamos un usuario, no deberían eliminarse las reservas de ese usuario.
+
+            */
 
 
         }
