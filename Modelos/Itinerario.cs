@@ -16,6 +16,13 @@ namespace ViajePlusBDAPI.Modelos
         [StringLength(30)]
         public string ciudad_destino {  get; set; }
 
+        [Required]
+        public DateTime? fechaHora_partida { get; set; }
+
+        [Required]
+        public DateTime? fechaHora_llegada { get; set; }
+
+
         [JsonIgnore]
         public ICollection<Servicio>? Servicios { get; set; }
 
