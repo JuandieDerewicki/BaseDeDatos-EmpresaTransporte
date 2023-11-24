@@ -14,6 +14,9 @@ namespace ViajePlusBDAPI.Modelos
         [ForeignKey("PuntoIntermedio")]
         public int? id_puntoIntermedio { get; set; }
 
+        public DateTime? hora_llegada_PI { get; set; } 
+        public DateTime? hora_salida_PI {  get; set; }  
+
         public virtual Itinerario? Itinerario { get; set; }
         public virtual PuntoIntermedio? PuntoIntermedio { get; set; }
     }
