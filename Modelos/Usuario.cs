@@ -18,7 +18,7 @@ namespace ViajePlusBDAPI.Modelos
 
         [Required]
         [StringLength(20)]
-        public string fechaNacimiento { get; set; }
+        public DateTime fechaNacimiento { get; set; }
 
         [Required]
         [StringLength(50)]
