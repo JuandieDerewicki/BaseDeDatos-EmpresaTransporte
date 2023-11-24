@@ -54,6 +54,15 @@ namespace ViajePlusBDAPI
                 .HasOne(su => su.Usuario)
                 .WithMany(u => u.Servicio_Usuarios)
                 .HasForeignKey(su => su.dni_usuario);
+
+            modelBuilder.Entity<Servicio_Usuario>()
+                  .HasOne(su => su.PuntoIntermedio)
+                  .WithOne()
+                  .HasForeignKey<Servicio_Usuario>(su => su.id_puntoIntermedio);
+                  //.OnDelete(DeleteBehavior.Restrict);
+                  //.OnDelete(DeleteBehavior.Cascade);
+
+
         }
 
     }
