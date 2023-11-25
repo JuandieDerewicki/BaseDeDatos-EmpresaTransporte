@@ -35,7 +35,7 @@ builder.Services.AddScoped<IRolService, RolService>();
 builder.Services.AddScoped<IPuntoIntermedioService, PuntoIntermedioService>();
 //builder.Services.AddScoped<IServicioUsuarioService, ServicioUsuarioService>();
 //builder.Services.AddScoped<IItinerarioPuntoIntermedioService, ItinerarioPuntoIntermedioService>();
-//builder.Services.AddScoped<IUnidadTransporteService, UnidadTransporteService>();
+builder.Services.AddScoped<IUnidadTransporteService, UnidadTransporteService>();
 
 
 var app = builder.Build();
