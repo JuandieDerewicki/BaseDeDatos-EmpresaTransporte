@@ -99,7 +99,25 @@ namespace ViajePlusBDAPI.Migrations
 
                     b.HasKey("id_puntoIntermedio");
 
-                    b.ToTable("PuntoIntermedios");
+                    b.ToTable("PuntosIntermedios");
+                });
+
+            modelBuilder.Entity("ViajePlusBDAPI.Modelos.Rol", b =>
+                {
+                    b.Property<int>("id_rol")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_rol"));
+
+                    b.Property<string>("tipo_rol")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.HasKey("id_rol");
+
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("ViajePlusBDAPI.Modelos.Servicio", b =>
@@ -188,7 +206,7 @@ namespace ViajePlusBDAPI.Migrations
 
                     b.HasKey("id_unidadTransporte");
 
-                    b.ToTable("UnidadTransportes");
+                    b.ToTable("UnidadesTransporte");
                 });
 
             modelBuilder.Entity("ViajePlusBDAPI.Modelos.Usuario", b =>
@@ -216,6 +234,9 @@ namespace ViajePlusBDAPI.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("id_rol")
+                        .HasColumnType("int");
+
                     b.Property<string>("nombreCompleto")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -232,6 +253,8 @@ namespace ViajePlusBDAPI.Migrations
                         .HasColumnType("nvarchar(30)");
 
                     b.HasKey("dni");
+
+                    b.HasIndex("id_rol");
 
                     b.ToTable("Usuarios");
                 });
@@ -296,6 +319,17 @@ namespace ViajePlusBDAPI.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("ViajePlusBDAPI.Modelos.Usuario", b =>
+                {
+                    b.HasOne("ViajePlusBDAPI.Modelos.Rol", "RolesUsuarios")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("id_rol")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RolesUsuarios");
+                });
+
             modelBuilder.Entity("ViajePlusBDAPI.Modelos.Itinerario", b =>
                 {
                     b.Navigation("Itinerario_PuntoIntermedios");
@@ -306,6 +340,11 @@ namespace ViajePlusBDAPI.Migrations
             modelBuilder.Entity("ViajePlusBDAPI.Modelos.PuntoIntermedio", b =>
                 {
                     b.Navigation("Itinerario_PuntoIntermedios");
+                });
+
+            modelBuilder.Entity("ViajePlusBDAPI.Modelos.Rol", b =>
+                {
+                    b.Navigation("Usuarios");
                 });
 
             modelBuilder.Entity("ViajePlusBDAPI.Modelos.Servicio", b =>
