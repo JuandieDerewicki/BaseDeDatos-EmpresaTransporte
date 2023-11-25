@@ -43,5 +43,10 @@ namespace ViajePlusBDAPI.Modelos
 
         [JsonIgnore]
         public ICollection<Servicio_Usuario>? Servicio_Usuarios { get; set; }
+
+        public int id_rol { get; set; }
+
+        [ForeignKey("id_rol")] // Clave Foranea para relacionar un Usuario con su rol en la tabla "Roles"
+        public Rol RolesUsuarios { get; set; }
     }
 }

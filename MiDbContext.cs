@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ViajePlusBDAPI.Modelos;
+//using DbContext = Microsoft.EntityFrameworkCore.DbContext;
 
 namespace ViajePlusBDAPI
 {
@@ -9,11 +10,13 @@ namespace ViajePlusBDAPI
 
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Itinerario> Itinerarios { get; set; }
-        public DbSet<PuntoIntermedio> PuntoIntermedios { get; set; }
+        public DbSet<PuntoIntermedio> PuntosIntermedios { get; set; }
         public DbSet<Itinerario_PuntoIntermedio> Itinerario_PuntoIntermedios { get; set; }
         public DbSet<Servicio> Servicios { get; set; }
         public DbSet<Servicio_Usuario> Servicio_Usuarios { get; set; }
         public DbSet<UnidadTransporte> UnidadTransportes { get; set; }
+        public DbSet<Rol> Roles { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -67,6 +70,12 @@ namespace ViajePlusBDAPI
                   .WithOne()
                   .HasForeignKey<Servicio_Usuario>(su => su.id_puntoIntermedio)
                   .OnDelete(DeleteBehavior.Restrict);
+
+            // Relación Usuarios-Roles (1:N)
+            modelBuilder.Entity<Usuario>()
+                .HasOne(u => u.RolesUsuarios)
+                .WithMany(r => r.Usuarios)
+                .HasForeignKey(u => u.id_rol);
 
             /*
            La eliminación por cascada se aplica a:

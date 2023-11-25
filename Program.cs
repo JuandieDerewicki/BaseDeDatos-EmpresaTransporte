@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ViajePlusBDAPI;
+using ViajePlusBDAPI.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,10 +28,11 @@ builder.Services.AddCors(opt =>
 });
 
 // Agregar servicios y dependencias
-//builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IRolService, RolService>();
 //builder.Services.AddScoped<IItinerarioService, ItinerarioService>();
 //builder.Services.AddScoped<IServicioService, ServicioService>();
-//builder.Services.AddScoped<IPuntoIntermedioService, PuntoIntermedioService>();
+builder.Services.AddScoped<IPuntoIntermedioService, PuntoIntermedioService>();
 //builder.Services.AddScoped<IServicioUsuarioService, ServicioUsuarioService>();
 //builder.Services.AddScoped<IItinerarioPuntoIntermedioService, ItinerarioPuntoIntermedioService>();
 //builder.Services.AddScoped<IUnidadTransporteService, UnidadTransporteService>();
