@@ -48,9 +48,10 @@ namespace ViajePlusBDAPI.Servicios
 
             itinerarioExistente.ciudad_origen = itinerario.ciudad_origen;
             itinerarioExistente.ciudad_destino = itinerario.ciudad_destino;
-            itinerarioExistente.fechaHora_partida = itinerario.fechaHora_partida;
-            itinerarioExistente.fechaHora_llegada = itinerario.fechaHora_llegada;
-
+            itinerarioExistente.fecha_partida = itinerario.fecha_partida;
+            itinerarioExistente.fecha_llegada= itinerario.fecha_llegada;
+            itinerarioExistente.hora_llegada = itinerarioExistente.hora_llegada;
+            itinerarioExistente.hora_partida = itinerarioExistente.hora_partida;
             await _context.SaveChangesAsync();
 
             return itinerarioExistente;
