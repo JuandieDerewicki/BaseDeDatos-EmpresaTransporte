@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+//using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using ViajePlusBDAPI.Modelos;
 
 namespace ViajePlusBDAPI.Servicios
