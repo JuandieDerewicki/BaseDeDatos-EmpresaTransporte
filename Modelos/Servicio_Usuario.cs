@@ -24,9 +24,9 @@ namespace ViajePlusBDAPI.Modelos
         [JsonIgnore]
         public double? costo_final {  get; set; }
 
-        public virtual Usuario? Usuario { get; set; }
-        public virtual Servicio? Servicio { get; set; }
-        public virtual PuntoIntermedio? PuntoIntermedio { get; set;  }
+        public Usuario? Usuario { get; set; }
+        public Servicio? Servicio { get; set; }
+        public PuntoIntermedio? PuntoIntermedio { get; set;  }
 
         public void CalcularCostoFinal(Servicio servicio)
         {
