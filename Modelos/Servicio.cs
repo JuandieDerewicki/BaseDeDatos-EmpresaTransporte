@@ -12,7 +12,9 @@ namespace ViajePlusBDAPI.Modelos
         [Required]
         [StringLength(50)]
         public double? costo_predeterminado { get; set; }
-        public int disponibilidad { get; set; }
+
+        [JsonIgnore]
+        public int? disponibilidad { get; set; }
 
         [ForeignKey("Itinerario")]
         public int? id_itinerario { get; set; }
