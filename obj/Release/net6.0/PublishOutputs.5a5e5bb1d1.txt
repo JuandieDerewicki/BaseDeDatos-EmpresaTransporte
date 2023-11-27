@@ -6,8 +6,6 @@ C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Rel
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\ViajePlusBDAPI.pdb
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\Azure.Core.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\Azure.Identity.dll
-C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\EntityFramework.SqlServer.dll
-C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\EntityFramework.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\Microsoft.Data.SqlClient.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\Microsoft.EntityFrameworkCore.dll
@@ -37,9 +35,7 @@ C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Rel
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll
-C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\System.CodeDom.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\System.Configuration.ConfigurationManager.dll
-C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\System.Data.SqlClient.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\System.Drawing.Common.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\System.Memory.Data.dll
@@ -56,11 +52,6 @@ C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Rel
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\runtimes\win-arm64\native\sni.dll
-C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\runtimes\win-x64\native\sni.dll
-C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\runtimes\win-x86\native\sni.dll
-C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
-C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 C:\Users\bocaj\OneDrive\Documentos\Facultad\Base de datos\ViajePlusBDAPI\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\net6.0\System.Runtime.Caching.dll

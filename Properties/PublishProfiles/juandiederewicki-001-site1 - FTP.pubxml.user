@@ -7,5 +7,8 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword />
+    <_PublishTargetUrl>ftp://win5081.site4now.net:21/centroeducativo</_PublishTargetUrl>
+    <History>False|2023-11-27T22:55:40.1445253Z;False|2023-11-27T19:54:09.1956979-03:00;False|2023-11-27T19:53:10.5853938-03:00;</History>
+    <LastFailureDetails />
   </PropertyGroup>
 </Project>

@@ -18,11 +18,11 @@ namespace ViajePlusBDAPI.Modelos
 
         [ForeignKey("Itinerario")]
         public int? id_itinerario { get; set; }
-        public virtual Itinerario? Itinerario { get; set; }
+        public Itinerario? Itinerario { get; set; }
 
         [ForeignKey("UnidadTransporte")]
         public int? id_unidadTransporte { get; set; }
-        public virtual UnidadTransporte? UnidadTransporte { get; set; }
+        public UnidadTransporte? UnidadTransporte { get; set; }
 
         [JsonIgnore]
         public ICollection<Servicio_Usuario>? Servicio_Usuarios { get; set; }
