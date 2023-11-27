@@ -40,13 +40,21 @@ namespace ViajePlusBDAPI.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<DateTime?>("fechaHora_llegada")
+                    b.Property<string>("fecha_llegada")
                         .IsRequired()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("fechaHora_partida")
+                    b.Property<string>("fecha_partida")
                         .IsRequired()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("hora_llegada")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("hora_partida")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id_itinerario");
 
@@ -61,13 +69,13 @@ namespace ViajePlusBDAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<DateTime?>("hora_llegada_PI")
+                    b.Property<string>("hora_llegada_PI")
                         .IsRequired()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("hora_salida_PI")
+                    b.Property<string>("hora_salida_PI")
                         .IsRequired()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("id_itinerario")
                         .HasColumnType("int");
@@ -81,7 +89,7 @@ namespace ViajePlusBDAPI.Migrations
 
                     b.HasIndex("id_puntoIntermedio");
 
-                    b.ToTable("Itinerario_PuntoIntermedios");
+                    b.ToTable("Itinerarios_PuntosIntermedios");
                 });
 
             modelBuilder.Entity("ViajePlusBDAPI.Modelos.PuntoIntermedio", b =>
@@ -159,7 +167,7 @@ namespace ViajePlusBDAPI.Migrations
                     b.Property<string>("dni_usuario")
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<double>("costo_final")
+                    b.Property<double?>("costo_final")
                         .HasColumnType("float");
 
                     b.Property<int>("id")
@@ -180,7 +188,7 @@ namespace ViajePlusBDAPI.Migrations
                         .IsUnique()
                         .HasFilter("[id_puntoIntermedio] IS NOT NULL");
 
-                    b.ToTable("Servicio_Usuarios");
+                    b.ToTable("Servicios_Usuarios");
                 });
 
             modelBuilder.Entity("ViajePlusBDAPI.Modelos.UnidadTransporte", b =>
@@ -230,9 +238,10 @@ namespace ViajePlusBDAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("fechaNacimiento")
-                        .HasMaxLength(20)
-                        .HasColumnType("datetime2");
+                    b.Property<string>("fechaNacimiento")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("id_rol")
                         .HasColumnType("int");
@@ -246,11 +255,6 @@ namespace ViajePlusBDAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
-
-                    b.Property<string>("tipo_usuario")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("dni");
 

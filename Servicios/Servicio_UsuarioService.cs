@@ -187,32 +187,32 @@ namespace ViajePlusBDAPI.Servicios
             }
         }
 
-        public async Task CancelarReservasAutomaticasAsync()
-        {
-            // Lógica para cancelar automáticamente las reservas que han expirado
-            // Este método debería ejecutarse automáticamente en segundo plano
-            var reservasExpiradas = await _context.Servicios_Usuarios
-                .Include(su => su.Servicio)  // Incluimos el Servicio y el Itinerario asociado
-                .ThenInclude(s => s.Itinerario)
-                .Where(r => r.Servicio.Itinerario.fechaHora_partida < DateTime.Now.AddMinutes(-30))
-                .ToListAsync();
+        //public async Task CancelarReservasAutomaticasAsync()
+        //{
+        //    // Lógica para cancelar automáticamente las reservas que han expirado
+        //    // Este método debería ejecutarse automáticamente en segundo plano
+        //    var reservasExpiradas = await _context.Servicios_Usuarios
+        //        .Include(su => su.Servicio)  // Incluimos el Servicio y el Itinerario asociado
+        //        .ThenInclude(s => s.Itinerario)
+        //        .Where(r => r.Servicio.Itinerario.fechaHora_partida < DateTime.Now.AddMinutes(-30))
+        //        .ToListAsync();
 
-            foreach (var reserva in reservasExpiradas)
-            {
-                // Elimina la reserva de la base de datos
-                _context.Servicios_Usuarios.Remove(reserva);
+        //    foreach (var reserva in reservasExpiradas)
+        //    {
+        //        // Elimina la reserva de la base de datos
+        //        _context.Servicios_Usuarios.Remove(reserva);
 
-                // Incrementa la disponibilidad de pasajes
-                var servicio = reserva.Servicio;
-                if (servicio != null)
-                {
-                    servicio.disponibilidad++;
-                    _context.Servicios.Update(servicio);
-                }
-            }
+        //        // Incrementa la disponibilidad de pasajes
+        //        var servicio = reserva.Servicio;
+        //        if (servicio != null)
+        //        {
+        //            servicio.disponibilidad++;
+        //            _context.Servicios.Update(servicio);
+        //        }
+        //    }
 
-            await _context.SaveChangesAsync();
-        }
+        //    await _context.SaveChangesAsync();
+        //}
 
 
 
@@ -229,7 +229,7 @@ namespace ViajePlusBDAPI.Servicios
         //Task<bool> VerificarDisponibilidadAsync(int idServicio);
         //Task<Servicio_Usuario> RealizarReservaAsync(Servicio_Usuario reserva);
         Task CancelarReservaAsync(int reservaId);
-        Task CancelarReservasAutomaticasAsync();
+        //Task CancelarReservasAutomaticasAsync();
         Task<Servicio_Usuario> AgregarServicioUsuarioYReservaAsync(Servicio_Usuario servicioUsuario);
 
     }
