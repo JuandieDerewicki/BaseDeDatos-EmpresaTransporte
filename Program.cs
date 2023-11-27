@@ -33,7 +33,7 @@ builder.Services.AddScoped<IRolService, RolService>();
 builder.Services.AddScoped<IItinerarioService, ItinerarioService>();
 builder.Services.AddScoped<IServicioService, ServicioService>();
 builder.Services.AddScoped<IPuntoIntermedioService, PuntoIntermedioService>();
-//builder.Services.AddScoped<IServicioUsuarioService, ServicioUsuarioService>();
+builder.Services.AddScoped<IServicioUsuarioService, Servicio_UsuarioService>();
 builder.Services.AddScoped<IItinerarioPuntoIntermedioService, Itinerario_PuntoIntermedioService>();
 builder.Services.AddScoped<IUnidadTransporteService, UnidadTransporteService>();
 

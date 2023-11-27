@@ -1,6 +1,73 @@
-﻿namespace ViajePlusBDAPI.Controladores
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using ViajePlusBDAPI.Modelos;
+using ViajePlusBDAPI.Servicios;
+
+namespace ViajePlusBDAPI.Controladores
 {
-    public class Servicio_UsuarioController
+    [EnableCors("ReglasCors")]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class Servicio_UsuarioController : ControllerBase
     {
+        private readonly IServicioUsuarioService _servicioUsuarioService;
+
+        public Servicio_UsuarioController(IServicioUsuarioService servicioUsuarioService)
+        {
+            _servicioUsuarioService = servicioUsuarioService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Servicio_Usuario>>> ObtenerTodosServiciosUsuarios()
+        {
+            var serviciosUsuarios = await _servicioUsuarioService.ObtenerTodosServiciosUsuariosAsync();
+            return Ok(serviciosUsuarios);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Servicio_Usuario>> ObtenerServicioUsuarioPorId(int id)
+        {
+            var servicioUsuario = await _servicioUsuarioService.ObtenerServicioUsuarioPorIdAsync(id);
+            if (servicioUsuario == null)
+            {
+                return NotFound();
+            }
+            return Ok(servicioUsuario);
+        }
+
+        [HttpGet("usuario/{dniUsuario}")]
+        public async Task<ActionResult<List<Servicio_Usuario>>> ObtenerServiciosUsuarioPorDni(string dniUsuario)
+        {
+            var serviciosUsuario = await _servicioUsuarioService.ObtenerServiciosUsuarioPorDniAsync(dniUsuario);
+            return Ok(serviciosUsuario);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Servicio_Usuario>> AgregarServicioUsuario(Servicio_Usuario servicioUsuario)
+        {
+            var nuevoServicioUsuario = await _servicioUsuarioService.AgregarServicioUsuarioAsync(servicioUsuario);
+            return CreatedAtAction(nameof(ObtenerServicioUsuarioPorId), new { id = nuevoServicioUsuario.id }, nuevoServicioUsuario);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Servicio_Usuario>> EditarServicioUsuario(int id, Servicio_Usuario servicioUsuario)
+        {
+            try
+            {
+                var servicioUsuarioEditado = await _servicioUsuarioService.EditarServicioUsuarioAsync(id, servicioUsuario);
+                return Ok(servicioUsuarioEditado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> EliminarServicioUsuario(int id)
+        {
+            await _servicioUsuarioService.EliminarServicioUsuarioAsync(id);
+            return NoContent();
+        }
     }
 }
