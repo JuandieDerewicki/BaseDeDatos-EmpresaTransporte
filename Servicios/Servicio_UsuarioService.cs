@@ -61,7 +61,104 @@ namespace ViajePlusBDAPI.Servicios
             _context.Servicios_Usuarios.Remove(servicioUsuarioExistente);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> VerificarDisponibilidadAsync(int idServicio)
+        {
+            var servicio = await _context.Servicios.FindAsync(idServicio);
+
+            if (servicio == null)
+            {
+                // El servicio no existe
+                return false;
+            }
+
+            // Verifica la disponibilidad en base a la cantidad de asientos de la unidad de transporte
+            return servicio.disponibilidad > 0;
+        }
+
+        public async Task<Servicio_Usuario> RealizarReservaAsync(Servicio_Usuario reserva)
+        {
+            var servicio = await _context.Servicios.FindAsync(reserva.id_servicio);
+
+            if (servicio == null)
+            {
+                // El servicio no existe
+                throw new InvalidOperationException("El servicio no existe.");
+            }
+
+            if (servicio.disponibilidad <= 0)
+            {
+                // No hay disponibilidad de pasajes
+                throw new InvalidOperationException("No hay disponibilidad de pasajes para este servicio.");
+            }
+
+            // Actualiza la disponibilidad en base a la cantidad de asientos de la unidad de transporte
+            servicio.disponibilidad--;
+
+            _context.Servicios.Update(servicio);
+            await _context.SaveChangesAsync();
+
+            // Agrega la reserva a la base de datos
+            _context.Servicios_Usuarios.Add(reserva);
+            await _context.SaveChangesAsync();
+
+            return reserva;
+        }
+
+        public async Task CancelarReservaAsync(int reservaId)
+        {
+            var reserva = await _context.Servicios_Usuarios.FindAsync(reservaId);
+
+            if (reserva == null)
+            {
+                // La reserva no existe
+                throw new InvalidOperationException("La reserva no existe.");
+            }
+
+            // Elimina la reserva de la base de datos
+            _context.Servicios_Usuarios.Remove(reserva);
+            await _context.SaveChangesAsync();
+
+            // Incrementa la disponibilidad de pasajes
+            var servicio = await _context.Servicios.FindAsync(reserva.id_servicio);
+            if (servicio != null)
+            {
+                servicio.disponibilidad++;
+                _context.Servicios.Update(servicio);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task CancelarReservasAutomaticasAsync()
+        {
+            // Lógica para cancelar automáticamente las reservas que han expirado
+            // Este método debería ejecutarse automáticamente en segundo plano
+            var reservasExpiradas = await _context.Servicios_Usuarios
+                .Include(su => su.Servicio)  // Incluimos el Servicio y el Itinerario asociado
+                .ThenInclude(s => s.Itinerario)
+                .Where(r => r.Servicio.Itinerario.fechaHora_partida < DateTime.Now.AddMinutes(-30))
+                .ToListAsync();
+
+            foreach (var reserva in reservasExpiradas)
+            {
+                // Elimina la reserva de la base de datos
+                _context.Servicios_Usuarios.Remove(reserva);
+
+                // Incrementa la disponibilidad de pasajes
+                var servicio = reserva.Servicio;
+                if (servicio != null)
+                {
+                    servicio.disponibilidad++;
+                    _context.Servicios.Update(servicio);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+
     }
+
     public interface IServicioUsuarioService
     {
         Task<List<Servicio_Usuario>> ObtenerTodosServiciosUsuariosAsync();
@@ -70,5 +167,10 @@ namespace ViajePlusBDAPI.Servicios
         Task<Servicio_Usuario> AgregarServicioUsuarioAsync(Servicio_Usuario servicioUsuario);
         Task<Servicio_Usuario> EditarServicioUsuarioAsync(int id, Servicio_Usuario servicioUsuario);
         Task EliminarServicioUsuarioAsync(int id);
+        Task<bool> VerificarDisponibilidadAsync(int idServicio);
+        Task<Servicio_Usuario> RealizarReservaAsync(Servicio_Usuario reserva);
+        Task CancelarReservaAsync(int reservaId);
+        Task CancelarReservasAutomaticasAsync();
+
     }
 }

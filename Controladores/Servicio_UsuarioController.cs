@@ -69,5 +69,41 @@ namespace ViajePlusBDAPI.Controladores
             await _servicioUsuarioService.EliminarServicioUsuarioAsync(id);
             return NoContent();
         }
+
+        [HttpGet("verificar-disponibilidad/{idServicio}")]
+        public async Task<IActionResult> VerificarDisponibilidad(int idServicio)
+        {
+            var disponibilidad = await _servicioUsuarioService.VerificarDisponibilidadAsync(idServicio);
+            return Ok(disponibilidad);
+        }
+
+        [HttpPost("realizar-reserva")]
+        public async Task<IActionResult> RealizarReserva([FromBody] Servicio_Usuario reserva)
+        {
+            try
+            {
+                var nuevaReserva = await _servicioUsuarioService.RealizarReservaAsync(reserva);
+                return Ok(nuevaReserva);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("cancelar-reserva/{reservaId}")]
+        public async Task<IActionResult> CancelarReserva(int reservaId)
+        {
+            try
+            {
+                await _servicioUsuarioService.CancelarReservaAsync(reservaId);
+                return Ok(new { message = "Reserva cancelada exitosamente." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
     }
 }
