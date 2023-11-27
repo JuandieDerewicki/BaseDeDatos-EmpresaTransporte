@@ -3,7 +3,7 @@ using ViajePlusBDAPI.Modelos;
 
 namespace ViajePlusBDAPI.Servicios
 {
-    public class ItinerarioService
+    public class ItinerarioService : IItinerarioService
     {
 
         private readonly MiDbContext _context;

@@ -30,7 +30,7 @@ builder.Services.AddCors(opt =>
 // Agregar servicios y dependencias
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IRolService, RolService>();
-//builder.Services.AddScoped<IItinerarioService, ItinerarioService>();
+builder.Services.AddScoped<IItinerarioService, ItinerarioService>();
 //builder.Services.AddScoped<IServicioService, ServicioService>();
 builder.Services.AddScoped<IPuntoIntermedioService, PuntoIntermedioService>();
 //builder.Services.AddScoped<IServicioUsuarioService, ServicioUsuarioService>();
