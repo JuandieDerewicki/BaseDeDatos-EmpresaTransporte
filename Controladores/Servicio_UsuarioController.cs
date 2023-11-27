@@ -42,12 +42,31 @@ namespace ViajePlusBDAPI.Controladores
             return Ok(serviciosUsuario);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Servicio_Usuario>> AgregarServicioUsuario(Servicio_Usuario servicioUsuario)
+        //[HttpPost]
+        //public async Task<ActionResult<Servicio_Usuario>> AgregarServicioUsuario(Servicio_Usuario servicioUsuario)
+        //{
+        //    var nuevoServicioUsuario = await _servicioUsuarioService.AgregarServicioUsuarioAsync(servicioUsuario);
+        //    return CreatedAtAction(nameof(ObtenerServicioUsuarioPorId), new { id = nuevoServicioUsuario.id }, nuevoServicioUsuario);
+        //}
+
+        [HttpPost("agregar-servicio-usuario-y-reserva")]
+        public async Task<IActionResult> AgregarServicioUsuarioYReserva([FromBody] Servicio_Usuario servicioUsuario)
         {
-            var nuevoServicioUsuario = await _servicioUsuarioService.AgregarServicioUsuarioAsync(servicioUsuario);
-            return CreatedAtAction(nameof(ObtenerServicioUsuarioPorId), new { id = nuevoServicioUsuario.id }, nuevoServicioUsuario);
+            try
+            {
+                var nuevoServicioUsuario = await _servicioUsuarioService.AgregarServicioUsuarioYReservaAsync(servicioUsuario);
+                return CreatedAtAction(nameof(ObtenerServicioUsuarioPorId), new { id = nuevoServicioUsuario.id }, nuevoServicioUsuario);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Ocurrió un error interno. Por favor, inténtelo de nuevo más tarde." });
+            }
         }
+
 
         [HttpPut("{id}")]
         public async Task<ActionResult<Servicio_Usuario>> EditarServicioUsuario(int id, Servicio_Usuario servicioUsuario)
@@ -70,26 +89,26 @@ namespace ViajePlusBDAPI.Controladores
             return NoContent();
         }
 
-        [HttpGet("verificar-disponibilidad/{idServicio}")]
-        public async Task<IActionResult> VerificarDisponibilidad(int idServicio)
-        {
-            var disponibilidad = await _servicioUsuarioService.VerificarDisponibilidadAsync(idServicio);
-            return Ok(disponibilidad);
-        }
+        //[HttpGet("verificar-disponibilidad/{idServicio}")]
+        //public async Task<IActionResult> VerificarDisponibilidad(int idServicio)
+        //{
+        //    var disponibilidad = await _servicioUsuarioService.VerificarDisponibilidadAsync(idServicio);
+        //    return Ok(disponibilidad);
+        //}
 
-        [HttpPost("realizar-reserva")]
-        public async Task<IActionResult> RealizarReserva([FromBody] Servicio_Usuario reserva)
-        {
-            try
-            {
-                var nuevaReserva = await _servicioUsuarioService.RealizarReservaAsync(reserva);
-                return Ok(nuevaReserva);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-        }
+        //[HttpPost("realizar-reserva")]
+        //public async Task<IActionResult> RealizarReserva([FromBody] Servicio_Usuario reserva)
+        //{
+        //    try
+        //    {
+        //        var nuevaReserva = await _servicioUsuarioService.RealizarReservaAsync(reserva);
+        //        return Ok(nuevaReserva);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(new { message = ex.Message });
+        //    }
+        //}
 
         [HttpDelete("cancelar-reserva/{reservaId}")]
         public async Task<IActionResult> CancelarReserva(int reservaId)

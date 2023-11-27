@@ -27,12 +27,25 @@ namespace ViajePlusBDAPI.Servicios
             return await _context.Servicios_Usuarios.Where(su => su.dni_usuario == dniUsuario).ToListAsync();
         }
 
-        public async Task<Servicio_Usuario> AgregarServicioUsuarioAsync(Servicio_Usuario servicioUsuario)
-        {
-            _context.Servicios_Usuarios.Add(servicioUsuario);
-            await _context.SaveChangesAsync();
-            return servicioUsuario;
-        }
+        //public async Task<Servicio_Usuario> AgregarServicioUsuarioAsync(Servicio_Usuario servicioUsuario)
+        //{
+        //    _context.Servicios_Usuarios.Add(servicioUsuario);
+        //    await _context.SaveChangesAsync();
+        //    return servicioUsuario;
+        //}
+        //public async Task<Servicio_Usuario> AgregarServicioUsuarioAsync(Servicio_Usuario servicioUsuario)
+        //{
+        //    // Calcular el costo final
+        //    servicioUsuario.CalcularCostoFinal(servicioUsuario.Servicio);
+
+        //    // Agregar el servicioUsuario al contexto
+        //    _context.Servicios_Usuarios.Add(servicioUsuario);
+
+        //    // Guardar los cambios en la base de datos
+        //    await _context.SaveChangesAsync();
+
+        //    return servicioUsuario;
+        //}
 
         public async Task<Servicio_Usuario> EditarServicioUsuarioAsync(int id, Servicio_Usuario servicioUsuario)
         {
@@ -62,23 +75,29 @@ namespace ViajePlusBDAPI.Servicios
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> VerificarDisponibilidadAsync(int idServicio)
+        public async Task<Servicio_Usuario> AgregarServicioUsuarioYReservaAsync(Servicio_Usuario servicioUsuario)
         {
-            var servicio = await _context.Servicios.FindAsync(idServicio);
+            // Calcular el costo final
+            servicioUsuario.CalcularCostoFinal(servicioUsuario.Servicio);
 
-            if (servicio == null)
+            // Verificar la disponibilidad del servicio
+            if (servicioUsuario.id_servicio.HasValue)
             {
-                // El servicio no existe
-                return false;
+                await VerificarDisponibilidadAsync(servicioUsuario.id_servicio.Value);
             }
 
-            // Verifica la disponibilidad en base a la cantidad de asientos de la unidad de transporte
-            return servicio.disponibilidad > 0;
+            // Agregar el servicioUsuario al contexto
+            _context.Servicios_Usuarios.Add(servicioUsuario);
+
+            // Guardar los cambios en la base de datos
+            await _context.SaveChangesAsync();
+
+            return servicioUsuario;
         }
 
-        public async Task<Servicio_Usuario> RealizarReservaAsync(Servicio_Usuario reserva)
+        private async Task VerificarDisponibilidadAsync(int idServicio)
         {
-            var servicio = await _context.Servicios.FindAsync(reserva.id_servicio);
+            var servicio = await _context.Servicios.FindAsync(idServicio);
 
             if (servicio == null)
             {
@@ -94,16 +113,55 @@ namespace ViajePlusBDAPI.Servicios
 
             // Actualiza la disponibilidad en base a la cantidad de asientos de la unidad de transporte
             servicio.disponibilidad--;
-
             _context.Servicios.Update(servicio);
             await _context.SaveChangesAsync();
-
-            // Agrega la reserva a la base de datos
-            _context.Servicios_Usuarios.Add(reserva);
-            await _context.SaveChangesAsync();
-
-            return reserva;
         }
+
+
+
+
+        //public async Task<bool> VerificarDisponibilidadAsync(int idServicio)
+        //{
+        //    var servicio = await _context.Servicios.FindAsync(idServicio);
+
+        //    if (servicio == null)
+        //    {
+        //        // El servicio no existe
+        //        return false;
+        //    }
+
+        //    // Verifica la disponibilidad en base a la cantidad de asientos de la unidad de transporte
+        //    return servicio.disponibilidad > 0;
+        //}
+
+        //public async Task<Servicio_Usuario> RealizarReservaAsync(Servicio_Usuario reserva)
+        //{
+        //    var servicio = await _context.Servicios.FindAsync(reserva.id_servicio);
+
+        //    if (servicio == null)
+        //    {
+        //        // El servicio no existe
+        //        throw new InvalidOperationException("El servicio no existe.");
+        //    }
+
+        //    if (servicio.disponibilidad <= 0)
+        //    {
+        //        // No hay disponibilidad de pasajes
+        //        throw new InvalidOperationException("No hay disponibilidad de pasajes para este servicio.");
+        //    }
+
+        //    // Actualiza la disponibilidad en base a la cantidad de asientos de la unidad de transporte
+        //    servicio.disponibilidad--;
+
+        //    _context.Servicios.Update(servicio);
+        //    await _context.SaveChangesAsync();
+
+        //    // Agrega la reserva a la base de datos
+        //    _context.Servicios_Usuarios.Add(reserva);
+        //    await _context.SaveChangesAsync();
+
+        //    return reserva;
+        //}
 
         public async Task CancelarReservaAsync(int reservaId)
         {
@@ -157,6 +215,7 @@ namespace ViajePlusBDAPI.Servicios
         }
 
 
+
     }
 
     public interface IServicioUsuarioService
@@ -164,13 +223,14 @@ namespace ViajePlusBDAPI.Servicios
         Task<List<Servicio_Usuario>> ObtenerTodosServiciosUsuariosAsync();
         Task<Servicio_Usuario> ObtenerServicioUsuarioPorIdAsync(int id);
         Task<List<Servicio_Usuario>> ObtenerServiciosUsuarioPorDniAsync(string dniUsuario);
-        Task<Servicio_Usuario> AgregarServicioUsuarioAsync(Servicio_Usuario servicioUsuario);
+        //Task<Servicio_Usuario> AgregarServicioUsuarioAsync(Servicio_Usuario servicioUsuario);
         Task<Servicio_Usuario> EditarServicioUsuarioAsync(int id, Servicio_Usuario servicioUsuario);
         Task EliminarServicioUsuarioAsync(int id);
-        Task<bool> VerificarDisponibilidadAsync(int idServicio);
-        Task<Servicio_Usuario> RealizarReservaAsync(Servicio_Usuario reserva);
+        //Task<bool> VerificarDisponibilidadAsync(int idServicio);
+        //Task<Servicio_Usuario> RealizarReservaAsync(Servicio_Usuario reserva);
         Task CancelarReservaAsync(int reservaId);
         Task CancelarReservasAutomaticasAsync();
+        Task<Servicio_Usuario> AgregarServicioUsuarioYReservaAsync(Servicio_Usuario servicioUsuario);
 
     }
 }

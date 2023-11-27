@@ -17,8 +17,8 @@ namespace ViajePlusBDAPI.Modelos
 
 
         [Required]
-        [StringLength(20)]
-        public DateTime fechaNacimiento { get; set; }
+        [StringLength(50)]
+        public string fechaNacimiento { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -32,10 +32,6 @@ namespace ViajePlusBDAPI.Modelos
         [Required]
         [StringLength(15)]
         public string telefono { get; set; }
-
-        [Required]
-        [StringLength(30)]
-        public string tipo_usuario { get; set; }
 
         [Required]
         [StringLength(64)]

@@ -15,10 +15,10 @@ namespace ViajePlusBDAPI.Modelos
         public int? id_puntoIntermedio { get; set; }
 
         [Required]
-        public DateTime? hora_llegada_PI { get; set; }
+        public string hora_llegada_PI { get; set; }
 
         [Required]
-        public DateTime? hora_salida_PI {  get; set; }  
+        public string hora_salida_PI {  get; set; }  
 
         public virtual Itinerario? Itinerario { get; set; }
         public virtual PuntoIntermedio? PuntoIntermedio { get; set; }

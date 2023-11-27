@@ -17,10 +17,16 @@ namespace ViajePlusBDAPI.Modelos
         public string ciudad_destino {  get; set; }
 
         [Required]
-        public DateTime? fechaHora_partida { get; set; }
+        public string fecha_partida { get; set; }
 
         [Required]
-        public DateTime? fechaHora_llegada { get; set; }
+        public string fecha_llegada { get; set; }
+
+        [Required]
+        public string hora_partida { get; set; }
+
+        [Required]
+        public string hora_llegada { get; set; }
 
 
         [JsonIgnore]
