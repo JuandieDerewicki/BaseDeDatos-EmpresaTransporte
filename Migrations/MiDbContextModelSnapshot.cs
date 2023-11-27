@@ -141,7 +141,7 @@ namespace ViajePlusBDAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("float");
 
-                    b.Property<int>("disponibilidad")
+                    b.Property<int?>("disponibilidad")
                         .HasColumnType("int");
 
                     b.Property<int?>("id_itinerario")
