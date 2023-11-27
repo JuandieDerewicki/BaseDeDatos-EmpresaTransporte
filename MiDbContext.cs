@@ -11,7 +11,7 @@ namespace ViajePlusBDAPI
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Itinerario> Itinerarios { get; set; }
         public DbSet<PuntoIntermedio> PuntosIntermedios { get; set; }
-        public DbSet<Itinerario_PuntoIntermedio> Itinerario_PuntoIntermedios { get; set; }
+        public DbSet<Itinerario_PuntoIntermedio> Itinerarios_PuntosIntermedios { get; set; }
         public DbSet<Servicio> Servicios { get; set; }
         public DbSet<Servicio_Usuario> Servicio_Usuarios { get; set; }
         public DbSet<UnidadTransporte> UnidadesTransporte { get; set; }
