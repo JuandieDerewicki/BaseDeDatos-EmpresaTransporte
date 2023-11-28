@@ -22,7 +22,7 @@ namespace ViajePlusBDAPI.Modelos
 
         public string tipo_atencion {  get; set; }
 
-        public int? disponibilidad { get; set; }
+        public bool venta {  get; set; }
         public double? costo_final {  get; set; }
 
         public Usuario? Usuario { get; set; }

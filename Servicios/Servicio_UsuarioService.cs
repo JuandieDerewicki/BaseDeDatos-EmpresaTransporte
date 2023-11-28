@@ -76,102 +76,6 @@ namespace ViajePlusBDAPI.Servicios
         }
 
 
-        //public async Task<Servicio_Usuario> AgregarServicioUsuarioYReservaAsync(Servicio_Usuario servicioUsuario)
-        //{
-        //    int? disponibilidadAntes = null;
-        //    int? disponibilidadDespues = null;
-
-        //    try
-        //    {
-        //        if (servicioUsuario == null)
-        //        {
-        //            throw new ArgumentNullException(nameof(servicioUsuario), "El servicioUsuario no puede ser nulo.");
-        //        }
-
-        //        // Verificar si existe el usuario
-        //        if (string.IsNullOrEmpty(servicioUsuario.dni_usuario))
-        //        {
-        //            throw new Exception("El dni_usuario no puede estar vacío.");
-        //        }
-
-        //        var usuario = await ObtenerUsuarioAsync(servicioUsuario.dni_usuario);
-
-        //        if (usuario == null)
-        //        {
-        //            throw new Exception("El usuario no existe");
-        //        }
-
-        //        servicioUsuario.Usuario = usuario;
-
-        //        // Obtener la disponibilidad antes de la reserva
-        //        disponibilidadAntes = await ObtenerDisponibilidadAsync(servicioUsuario.id_servicio ?? 0);
-
-        //        // Obtener el servicio asociado
-        //        var servicio = await ObtenerServicioAsync(servicioUsuario.id_servicio ?? 0);
-
-        //        if (servicio == null)
-        //        {
-        //            throw new Exception("El servicio no existe");
-        //        }
-
-        //        servicioUsuario.Servicio = servicio;
-
-        //        // Obtener el punto intermedio asociado
-        //        if (servicioUsuario.id_puntoIntermedio.HasValue)
-        //        {
-        //            var puntoIntermedio = await ObtenerPuntoIntermedioAsync(servicioUsuario.id_puntoIntermedio.Value);
-
-        //            if (puntoIntermedio == null)
-        //            {
-        //                throw new Exception("El punto intermedio no existe");
-        //            }
-
-        //            servicioUsuario.PuntoIntermedio = puntoIntermedio;
-        //        }
-
-        //        // Calcular el costo final
-        //        servicioUsuario.CalcularCostoFinal(servicioUsuario.Servicio);
-
-        //        // Verificar la disponibilidad del servicio si es necesario
-        //        if (servicioUsuario.id_servicio.HasValue)
-        //        {
-        //            // Considera agregar una verificación más detallada de la disponibilidad aquí según tu lógica de negocio
-        //            await VerificarDisponibilidadAsync(servicioUsuario.id_servicio.Value);
-
-        //            // Obtener la disponibilidad después de la reserva
-        //            disponibilidadDespues = await ObtenerDisponibilidadAsync(servicioUsuario.id_servicio ?? 0);
-        //        }
-
-        //        // Agregar el servicioUsuario al contexto y guardar los cambios en la base de datos
-        //        _context.Servicios_Usuarios.Add(servicioUsuario);
-        //        await _context.SaveChangesAsync();
-
-        //        // Incluir disponibilidad en la respuesta
-        //        var response = new
-        //        {
-        //            id = servicioUsuario.id,
-        //            dni_usuario = servicioUsuario.dni_usuario,
-        //            id_servicio = servicioUsuario.id_servicio,
-        //            id_puntoIntermedio = servicioUsuario.id_puntoIntermedio,
-        //            tipo_atencion = servicioUsuario.tipo_atencion,
-        //            costo_final = servicioUsuario.costo_final,
-        //            disponibilidad_antes = disponibilidadAntes,
-        //            disponibilidad_despues = disponibilidadDespues,
-        //            // Otros campos que desees incluir en la respuesta
-        //        };
-
-        //        return servicioUsuario;
-        //    }
-        //    catch (ArgumentNullException ex)
-        //    {
-        //        throw new InvalidOperationException($"Error al agregar el servicioUsuario: {ex.ParamName} - {ex.Message}", ex);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new InvalidOperationException($"Error al agregar el servicioUsuario: {ex.Message}", ex);
-        //    }
-        //}
-
         public async Task<Servicio_Usuario> AgregarServicioUsuarioYReservaAsync(Servicio_Usuario servicioUsuario)
         {
             int? disponibilidadAntes = null;
@@ -300,7 +204,7 @@ namespace ViajePlusBDAPI.Servicios
             return servicioUsuarioTemporal.costo_final;
         }
 
-    /*    public async Task<int?> ObtenerDisponibilidadAntesReservaAsync(int idServicio)
+        public async Task<int?> ObtenerDisponibilidadAntesReservaAsync(int idServicio)
         {
             var servicio = await ObtenerServicioAsync(idServicio);
 
@@ -310,7 +214,7 @@ namespace ViajePlusBDAPI.Servicios
             }
 
             return servicio.disponibilidad;
-        }*/
+        }
 
         public async Task<double?> ObtenerCostoFinalDespuesReservaAsync(int idServicio)
         {
@@ -356,11 +260,11 @@ namespace ViajePlusBDAPI.Servicios
 
         public async Task<int?> ObtenerDisponibilidadAsync(int idServicio)
         {
-           /* var servicio = await _context.Servicios
+            var servicio = await _context.Servicios
                 .Where(s => s.id_servicio == idServicio)
                 .FirstOrDefaultAsync();
-           */
-            return null;
+
+            return servicio.disponibilidad;
         }
 
 
@@ -368,20 +272,20 @@ namespace ViajePlusBDAPI.Servicios
         {
             var servicio = await _context.Servicios.FindAsync(idServicio);
 
-            //if (servicio == null)
-            //{
-            //    // El servicio no existe
-            //    throw new InvalidOperationException("El servicio no existe.");
-            //}
+            if (servicio == null)
+            {
+                // El servicio no existe
+                throw new InvalidOperationException("El servicio no existe.");
+            }
 
-            //if (servicio.disponibilidad <= 0)
-            //{
-            //    // No hay disponibilidad de pasajes
-            //    throw new InvalidOperationException("No hay disponibilidad de pasajes para este servicio.");
-            //}
+            if (servicio.disponibilidad <= 0)
+            {
+                // No hay disponibilidad de pasajes
+                throw new InvalidOperationException("No hay disponibilidad de pasajes para este servicio.");
+            }
 
-            //// Actualiza la disponibilidad en base a la cantidad de asientos de la unidad de transporte
-            //servicio.disponibilidad--;
+            // Actualiza la disponibilidad en base a la cantidad de asientos de la unidad de transporte
+            servicio.disponibilidad--;
             _context.Servicios.Update(servicio);
             await _context.SaveChangesAsync();
         }
@@ -408,11 +312,6 @@ namespace ViajePlusBDAPI.Servicios
                 _context.Servicios.Update(servicio);
                 await _context.SaveChangesAsync();
             }
-        }
-
-        public Task<int?> ObtenerDisponibilidadAntesReservaAsync(int idServicio)
-        {
-            throw new NotImplementedException();
         }
     }
 

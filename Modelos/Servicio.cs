@@ -19,7 +19,7 @@ namespace ViajePlusBDAPI.Modelos
 
         public int? id_unidadTransporte { get; set; }
 
-
+        public int? disponibilidad { get; set; }
         public virtual Itinerario? Itinerario { get; set; }
         public virtual UnidadTransporte? UnidadTransporte { get; set; }
 
