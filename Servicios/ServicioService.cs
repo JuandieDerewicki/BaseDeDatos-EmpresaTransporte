@@ -38,26 +38,76 @@ namespace ViajePlusBDAPI.Servicios
         //    return servicio;
         //}
 
+        //public async Task<Servicio> AgregarServicioAsync(Servicio servicio)
+        //{
+        //    //// ...
+
+        //    //var itinerario = _context.Itinerarios.Find(servicio.id_itinerario);
+        //    //if (itinerario == null)
+        //    //{
+        //    //    throw new Exception("El itinerario no existe");
+        //    //}
+
+        //    //servicio.Itinerario = itinerario;
+
+        //    //// ...
+
+        //    //return servicio;
+
+        //    _context.Servicios.Add(servicio);
+        //    await _context.SaveChangesAsync();
+        //    return servicio;
+        //}
+
+        public async Task<UnidadTransporte> ObtenerUnidadTransporteAsync(int idUnidadTransporte)
+        {
+            return await _context.UnidadesTransporte.FindAsync(idUnidadTransporte);
+        }
+
         public async Task<Servicio> AgregarServicioAsync(Servicio servicio)
         {
-            //// ...
+            try
+            {
+                // Verifica si existe el itinerario y la unidad de transporte
+                if (servicio.id_itinerario.HasValue)
+                {
+                    var itinerario = await ObtenerItinerarioAsync(servicio.id_itinerario.Value);
 
-            //var itinerario = _context.Itinerarios.Find(servicio.id_itinerario);
-            //if (itinerario == null)
-            //{
-            //    throw new Exception("El itinerario no existe");
-            //}
+                    if (itinerario == null)
+                    {
+                        throw new Exception("El itinerario no existe");
+                    }
 
-            //servicio.Itinerario = itinerario;
+                    servicio.Itinerario = itinerario;
+                }
 
-            //// ...
+                if (servicio.id_unidadTransporte.HasValue)
+                {
+                    var unidadTransporte = await ObtenerUnidadTransporteAsync(servicio.id_unidadTransporte.Value);
 
-            //return servicio;
+                    if (unidadTransporte == null)
+                    {
+                        throw new Exception("La unidad de transporte no existe");
+                    }
 
-            _context.Servicios.Add(servicio);
-            await _context.SaveChangesAsync();
-            return servicio;
+                    servicio.UnidadTransporte = unidadTransporte;
+                }
+
+                // Agrega el servicio al contexto
+                _context.Servicios.Add(servicio);
+
+                // Guarda los cambios en la base de datos
+                await _context.SaveChangesAsync();
+
+                return servicio;
+            }
+            catch (Exception ex)
+            {
+                // Puedes agregar lógica adicional aquí si es necesario
+                throw; // Lanza la excepción para que se maneje en el controlador
+            }
         }
+
 
         public async Task<Servicio> EditarServicioAsync(int id, Servicio servicio)
         {
@@ -101,5 +151,6 @@ namespace ViajePlusBDAPI.Servicios
         Task<Servicio> EditarServicioAsync(int id, Servicio servicio);
         Task EliminarServicioAsync(int id);
         Task<Itinerario> ObtenerItinerarioAsync(int id);
+        Task<UnidadTransporte> ObtenerUnidadTransporteAsync(int idUnidadTransporte);
     }
 }
