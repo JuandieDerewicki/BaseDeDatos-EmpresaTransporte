@@ -41,15 +41,19 @@ namespace ViajePlusBDAPI
             modelBuilder.Entity<Servicio>()
                 .HasOne(s => s.Itinerario)
                 .WithMany(i => i.Servicios)
-                .HasForeignKey(s => s.id_itinerario);
+                .HasForeignKey(s => s.id_itinerario)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // .OnDelete(DeleteBehavior.Cascade);
 
             // Definir la relación N:1 entre UnidadTransporte y Servicio
             modelBuilder.Entity<Servicio>()
                 .HasOne(s => s.UnidadTransporte)
                 .WithMany(u => u.Servicios)
-                .HasForeignKey(s => s.id_unidadTransporte);
-               // .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(s => s.id_unidadTransporte)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // .OnDelete(DeleteBehavior.Cascade);
 
             // Definir la relación M:N entre Servicio y Usuario a través de Servicio_Usuario
             modelBuilder.Entity<Servicio_Usuario>()
@@ -65,7 +69,8 @@ namespace ViajePlusBDAPI
                 .HasOne(su => su.Usuario)
                 .WithMany(u => u.Servicio_Usuarios)
                 .HasForeignKey(su => su.dni_usuario)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
+            //.OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Servicio_Usuario>()
                   .HasOne(su => su.PuntoIntermedio)
