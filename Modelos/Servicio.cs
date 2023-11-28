@@ -10,7 +10,6 @@ namespace ViajePlusBDAPI.Modelos
         public int id_servicio {  get; set; }
 
         [Required]
-        [StringLength(50)]
         public double? costo_predeterminado { get; set; }
 
         [JsonIgnore]

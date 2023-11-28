@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 //using System.Data.Entity;
+//using System.Data.Entity;
 using ViajePlusBDAPI.Modelos;
 //using DbContext = Microsoft.EntityFrameworkCore.DbContext;
 

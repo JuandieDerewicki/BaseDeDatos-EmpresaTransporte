@@ -84,7 +84,7 @@ namespace ViajePlusBDAPI.Controladores
             try
             {
                 var servicioAgregado = await _servicioService.AgregarServicioAsync(nuevoServicio);
-                return CreatedAtAction("ObtenerServicioPorId", new { id = servicioAgregado.id_servicio }, servicioAgregado);
+                return servicioAgregado;
             }
             catch (Exception ex)
             {
