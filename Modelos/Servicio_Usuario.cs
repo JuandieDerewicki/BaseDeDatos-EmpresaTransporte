@@ -8,6 +8,7 @@ namespace ViajePlusBDAPI.Modelos
     public class Servicio_Usuario
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
 
         [ForeignKey("Usuario")]
@@ -21,7 +22,7 @@ namespace ViajePlusBDAPI.Modelos
 
         public string tipo_atencion {  get; set; }
 
-        [JsonIgnore]
+        public int? disponibilidad { get; set; }
         public double? costo_final {  get; set; }
 
         public Usuario? Usuario { get; set; }
