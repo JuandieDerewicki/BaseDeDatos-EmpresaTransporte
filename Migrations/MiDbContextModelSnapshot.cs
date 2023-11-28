@@ -284,13 +284,11 @@ namespace ViajePlusBDAPI.Migrations
                 {
                     b.HasOne("ViajePlusBDAPI.Modelos.Itinerario", "Itinerario")
                         .WithMany("Servicios")
-                        .HasForeignKey("id_itinerario")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("id_itinerario");
 
                     b.HasOne("ViajePlusBDAPI.Modelos.UnidadTransporte", "UnidadTransporte")
                         .WithMany("Servicios")
-                        .HasForeignKey("id_unidadTransporte")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("id_unidadTransporte");
 
                     b.Navigation("Itinerario");
 
