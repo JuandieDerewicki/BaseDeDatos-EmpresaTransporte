@@ -49,6 +49,24 @@ namespace ViajePlusBDAPI.Controladores
         //    return CreatedAtAction(nameof(ObtenerServicioUsuarioPorId), new { id = nuevoServicioUsuario.id }, nuevoServicioUsuario);
         //}
 
+        //[HttpPost("agregar-servicio-usuario-y-reserva")]
+        //public async Task<IActionResult> AgregarServicioUsuarioYReserva([FromBody] Servicio_Usuario servicioUsuario)
+        //{
+        //    try
+        //    {
+        //        var nuevoServicioUsuario = await _servicioUsuarioService.AgregarServicioUsuarioYReservaAsync(servicioUsuario);
+        //        return CreatedAtAction(nameof(ObtenerServicioUsuarioPorId), new { id = nuevoServicioUsuario.id }, nuevoServicioUsuario);
+        //    }
+        //    catch (InvalidOperationException ex)
+        //    {
+        //        return BadRequest(new { message = ex.Message });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { message = "Ocurrió un error interno. Por favor, inténtelo de nuevo más tarde." });
+        //    }
+        //}
+
         [HttpPost("agregar-servicio-usuario-y-reserva")]
         public async Task<IActionResult> AgregarServicioUsuarioYReserva([FromBody] Servicio_Usuario servicioUsuario)
         {
@@ -57,15 +75,20 @@ namespace ViajePlusBDAPI.Controladores
                 var nuevoServicioUsuario = await _servicioUsuarioService.AgregarServicioUsuarioYReservaAsync(servicioUsuario);
                 return CreatedAtAction(nameof(ObtenerServicioUsuarioPorId), new { id = nuevoServicioUsuario.id }, nuevoServicioUsuario);
             }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(new { message = $"Error al agregar el servicioUsuario: {ex.ParamName} - {ex.Message}" });
+            }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new { message = $"Error al agregar el servicioUsuario: {ex.Message}" });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, new { message = "Ocurrió un error interno. Por favor, inténtelo de nuevo más tarde." });
             }
         }
+
 
 
         [HttpPut("{id}")]

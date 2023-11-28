@@ -75,25 +75,82 @@ namespace ViajePlusBDAPI.Servicios
             await _context.SaveChangesAsync();
         }
 
+        //public async Task<Servicio_Usuario> AgregarServicioUsuarioYReservaAsync(Servicio_Usuario servicioUsuario)
+        //{
+        //    // Calcular el costo final
+        //    servicioUsuario.CalcularCostoFinal(servicioUsuario.Servicio);
+
+        //    // Verificar la disponibilidad del servicio
+        //    if (servicioUsuario.id_servicio.HasValue)
+        //    {
+        //        await VerificarDisponibilidadAsync(servicioUsuario.id_servicio.Value);
+        //    }
+
+        //    // Agregar el servicioUsuario al contexto
+        //    _context.Servicios_Usuarios.Add(servicioUsuario);
+
+        //    // Guardar los cambios en la base de datos
+        //    await _context.SaveChangesAsync();
+
+        //    return servicioUsuario;
+        //}
+
         public async Task<Servicio_Usuario> AgregarServicioUsuarioYReservaAsync(Servicio_Usuario servicioUsuario)
         {
-            // Calcular el costo final
-            servicioUsuario.CalcularCostoFinal(servicioUsuario.Servicio);
-
-            // Verificar la disponibilidad del servicio
-            if (servicioUsuario.id_servicio.HasValue)
+            try
             {
-                await VerificarDisponibilidadAsync(servicioUsuario.id_servicio.Value);
+                if (servicioUsuario == null)
+                {
+                    throw new ArgumentNullException(nameof(servicioUsuario), "El servicioUsuario no puede ser nulo.");
+                }
+
+                // Verificar si existe el usuario
+                if (string.IsNullOrEmpty(servicioUsuario.dni_usuario))
+                {
+                    throw new Exception("El dni_usuario no puede estar vacío.");
+                }
+
+                var usuario = await ObtenerUsuarioAsync(servicioUsuario.dni_usuario);
+
+                if (usuario == null)
+                {
+                    throw new Exception("El usuario no existe");
+                }
+
+                servicioUsuario.Usuario = usuario;
+
+                // Calcular el costo final
+                servicioUsuario.CalcularCostoFinal(servicioUsuario.Servicio);
+
+                // Verificar la disponibilidad del servicio si es necesario
+                if (servicioUsuario.id_servicio.HasValue)
+                {
+                    // Considera agregar una verificación más detallada de la disponibilidad aquí según tu lógica de negocio
+                    await VerificarDisponibilidadAsync(servicioUsuario.id_servicio.Value);
+                }
+
+                // Agregar el servicioUsuario al contexto y guardar los cambios en la base de datos
+                _context.Servicios_Usuarios.Add(servicioUsuario);
+                await _context.SaveChangesAsync();
+
+                return servicioUsuario;
             }
-
-            // Agregar el servicioUsuario al contexto
-            _context.Servicios_Usuarios.Add(servicioUsuario);
-
-            // Guardar los cambios en la base de datos
-            await _context.SaveChangesAsync();
-
-            return servicioUsuario;
+            catch (ArgumentNullException ex)
+            {
+                throw new InvalidOperationException($"Error al agregar el servicioUsuario: {ex.ParamName} - {ex.Message}", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error al agregar el servicioUsuario: {ex.Message}", ex);
+            }
         }
+
+        public async Task<Usuario?> ObtenerUsuarioAsync(string dniUsuario)
+        {
+            return await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.dni == dniUsuario);
+        }
+
 
         private async Task VerificarDisponibilidadAsync(int idServicio)
         {
@@ -231,6 +288,6 @@ namespace ViajePlusBDAPI.Servicios
         Task CancelarReservaAsync(int reservaId);
         //Task CancelarReservasAutomaticasAsync();
         Task<Servicio_Usuario> AgregarServicioUsuarioYReservaAsync(Servicio_Usuario servicioUsuario);
-
+        Task<Usuario?> ObtenerUsuarioAsync(string dniUsuario);
     }
 }

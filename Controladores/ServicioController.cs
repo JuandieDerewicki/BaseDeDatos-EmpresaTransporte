@@ -37,59 +37,68 @@ namespace ViajePlusBDAPI.Controladores
             return Ok(servicio);
         }
 
-        [HttpGet("itinerario/{idItinerario}")]
-        public async Task<ActionResult<List<Servicio>>> ObtenerServiciosPorItinerarioAsync(int idItinerario)
-        {
-            var servicios = await _servicioService.ObtenerServiciosPorItinerarioAsync(idItinerario);
-
-            if (servicios.Count == 0)
-            {
-                return NotFound();
-            }
-
-            return Ok(servicios);
-        }
-
-        //[HttpPost]
-        //public async Task<ActionResult<Servicio>> AgregarServicioAsync(Servicio servicio)
+        //[HttpGet("itinerario/{idItinerario}")]
+        //public async Task<ActionResult<List<Servicio>>> ObtenerServiciosPorItinerarioAsync(int idItinerario)
         //{
-        //    try
+        //    var servicios = await _servicioService.ObtenerServiciosPorItinerarioAsync(idItinerario);
+
+        //    if (servicios.Count == 0)
         //    {
-        //        var servicioAgregado = await _servicioService.AgregarServicioAsync(servicio);
-        //        return Ok(servicioAgregado);
+        //        return NotFound();
         //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, $"Error al agregar el servicio: {ex.Message}");
-        //    }
+
+        //    return Ok(servicios);
         //}
+
+
         //[HttpPost]
         //public async Task<ActionResult<Servicio>> AgregarServicioAsync([FromBody] Servicio nuevoServicio)
         //{
         //    try
         //    {
         //        var servicioAgregado = await _servicioService.AgregarServicioAsync(nuevoServicio);
-        //        return CreatedAtAction("ObtenerServicioPorId", new { id = servicioAgregado.id_servicio }, servicioAgregado);
+        //        return servicioAgregado;
         //    }
         //    catch (Exception ex)
         //    {
-        //        return StatusCode(500, $"Error al agregar el servicio: {ex.Message}");
+        //        // Cambiado para devolver más detalles sobre la excepción
+        //        return StatusCode(500, $"Error al agregar el servicio: {ex.Message}\n{ex.StackTrace}");
         //    }
         //}
-
 
         [HttpPost]
         public async Task<ActionResult<Servicio>> AgregarServicioAsync([FromBody] Servicio nuevoServicio)
         {
             try
             {
+                // ...
+
+                var itinerario = await _servicioService.ObtenerItinerarioAsync(nuevoServicio.id_itinerario ?? 0);
+                var unidadTransporte = await _servicioService.ObtenerUnidadTransporteAsync(nuevoServicio.id_unidadTransporte ?? 0);
+
+                if (itinerario == null)
+                {
+                    throw new Exception("El itinerario no existe");
+                }
+
+                if (unidadTransporte == null)
+                {
+                    throw new Exception("La unidad de transporte no existe");
+                }
+
+                nuevoServicio.Itinerario = itinerario;
+                nuevoServicio.UnidadTransporte = unidadTransporte;
+
                 var servicioAgregado = await _servicioService.AgregarServicioAsync(nuevoServicio);
-                return servicioAgregado;
+
+                // ...
+
+                return CreatedAtAction("ObtenerServicioPorId", new { id = servicioAgregado.id_servicio }, servicioAgregado);
             }
             catch (Exception ex)
             {
-                // Cambiado para devolver más detalles sobre la excepción
-                return StatusCode(500, $"Error al agregar el servicio: {ex.Message}\n{ex.StackTrace}");
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, $"Error al agregar el servicio: {ex.Message}");
             }
         }
 
