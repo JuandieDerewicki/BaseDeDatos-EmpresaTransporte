@@ -12,6 +12,10 @@ namespace ViajePlusBDAPI.Servicios
             _context = context;
         }
 
+        public async Task<Itinerario> ObtenerItinerarioAsync(int id)
+        {
+            return await _context.Itinerarios.FindAsync(id);
+        }
         public async Task<List<Servicio>> ObtenerTodosServiciosAsync()
         {
             return await _context.Servicios.ToListAsync();
@@ -27,8 +31,29 @@ namespace ViajePlusBDAPI.Servicios
             return await _context.Servicios.Where(s => s.id_itinerario == idItinerario).ToListAsync();
         }
 
+        //public async Task<Servicio> AgregarServicioAsync(Servicio servicio)
+        //{
+        //    _context.Servicios.Add(servicio);
+        //    await _context.SaveChangesAsync();
+        //    return servicio;
+        //}
+
         public async Task<Servicio> AgregarServicioAsync(Servicio servicio)
         {
+            //// ...
+
+            //var itinerario = _context.Itinerarios.Find(servicio.id_itinerario);
+            //if (itinerario == null)
+            //{
+            //    throw new Exception("El itinerario no existe");
+            //}
+
+            //servicio.Itinerario = itinerario;
+
+            //// ...
+
+            //return servicio;
+
             _context.Servicios.Add(servicio);
             await _context.SaveChangesAsync();
             return servicio;
@@ -75,5 +100,6 @@ namespace ViajePlusBDAPI.Servicios
         Task<Servicio> AgregarServicioAsync(Servicio servicio);
         Task<Servicio> EditarServicioAsync(int id, Servicio servicio);
         Task EliminarServicioAsync(int id);
+        Task<Itinerario> ObtenerItinerarioAsync(int id);
     }
 }

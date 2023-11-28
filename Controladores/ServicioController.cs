@@ -50,16 +50,51 @@ namespace ViajePlusBDAPI.Controladores
             return Ok(servicios);
         }
 
+        //[HttpPost]
+        //public async Task<ActionResult<Servicio>> AgregarServicioAsync(Servicio servicio)
+        //{
+        //    try
+        //    {
+        //        var servicioAgregado = await _servicioService.AgregarServicioAsync(servicio);
+        //        return Ok(servicioAgregado);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Error al agregar el servicio: {ex.Message}");
+        //    }
+        //}
         [HttpPost]
-        public async Task<ActionResult<Servicio>> AgregarServicioAsync(Servicio servicio)
+        public async Task<ActionResult<Servicio>> AgregarServicioAsync([FromBody] Servicio nuevoServicio)
         {
             try
             {
-                var servicioAgregado = await _servicioService.AgregarServicioAsync(servicio);
-                return Ok(servicioAgregado);
+                // ...
+
+                var itinerario = await _servicioService.ObtenerItinerarioAsync(nuevoServicio.id_itinerario ?? 0);
+
+                if (itinerario == null)
+                {
+                    throw new Exception("El itinerario no existe");
+                }
+
+                if (itinerario.id_itinerario != nuevoServicio.id_itinerario)
+                {
+                    throw new Exception("El ID del itinerario no es correcto");
+                }
+
+                nuevoServicio.Itinerario = itinerario;
+
+                // ...
+
+                var servicioAgregado = await _servicioService.AgregarServicioAsync(nuevoServicio);
+
+                // ...
+
+                return CreatedAtAction("ObtenerServicioPorId", new { id = servicioAgregado.id_servicio }, servicioAgregado);
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return StatusCode(500, $"Error al agregar el servicio: {ex.Message}");
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+//using System.Data.Entity;
 using ViajePlusBDAPI.Modelos;
 //using DbContext = Microsoft.EntityFrameworkCore.DbContext;
 
@@ -39,15 +40,15 @@ namespace ViajePlusBDAPI
             modelBuilder.Entity<Servicio>()
                 .HasOne(s => s.Itinerario)
                 .WithMany(i => i.Servicios)
-                .HasForeignKey(s => s.id_itinerario)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(s => s.id_itinerario);
+            // .OnDelete(DeleteBehavior.Cascade);
 
             // Definir la relación N:1 entre UnidadTransporte y Servicio
             modelBuilder.Entity<Servicio>()
                 .HasOne(s => s.UnidadTransporte)
                 .WithMany(u => u.Servicios)
-                .HasForeignKey(s => s.id_unidadTransporte)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(s => s.id_unidadTransporte);
+               // .OnDelete(DeleteBehavior.Cascade);
 
             // Definir la relación M:N entre Servicio y Usuario a través de Servicio_Usuario
             modelBuilder.Entity<Servicio_Usuario>()
