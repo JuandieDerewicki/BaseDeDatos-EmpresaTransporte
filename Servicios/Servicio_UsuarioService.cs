@@ -202,7 +202,7 @@ namespace ViajePlusBDAPI.Servicios
                 servicioUsuario.Usuario = usuario;
 
                 // Obtener la disponibilidad antes de la reserva
-                disponibilidadAntes = await ObtenerDisponibilidadAntesReservaAsync(servicioUsuario.id_servicio ?? 0);
+                //disponibilidadAntes = await ObtenerDisponibilidadAntesReservaAsync(servicioUsuario.id_servicio ?? 0);
 
                 // Obtener el costo final antes de la reserva
                 costoFinalAntes = await ObtenerCostoFinalAntesReservaAsync(servicioUsuario.id_servicio ?? 0);
@@ -300,7 +300,7 @@ namespace ViajePlusBDAPI.Servicios
             return servicioUsuarioTemporal.costo_final;
         }
 
-        public async Task<int?> ObtenerDisponibilidadAntesReservaAsync(int idServicio)
+    /*    public async Task<int?> ObtenerDisponibilidadAntesReservaAsync(int idServicio)
         {
             var servicio = await ObtenerServicioAsync(idServicio);
 
@@ -310,7 +310,7 @@ namespace ViajePlusBDAPI.Servicios
             }
 
             return servicio.disponibilidad;
-        }
+        }*/
 
         public async Task<double?> ObtenerCostoFinalDespuesReservaAsync(int idServicio)
         {
@@ -356,11 +356,11 @@ namespace ViajePlusBDAPI.Servicios
 
         public async Task<int?> ObtenerDisponibilidadAsync(int idServicio)
         {
-            var servicio = await _context.Servicios
+           /* var servicio = await _context.Servicios
                 .Where(s => s.id_servicio == idServicio)
                 .FirstOrDefaultAsync();
-
-            return servicio?.disponibilidad;
+           */
+            return null;
         }
 
 
@@ -368,20 +368,20 @@ namespace ViajePlusBDAPI.Servicios
         {
             var servicio = await _context.Servicios.FindAsync(idServicio);
 
-            if (servicio == null)
-            {
-                // El servicio no existe
-                throw new InvalidOperationException("El servicio no existe.");
-            }
+            //if (servicio == null)
+            //{
+            //    // El servicio no existe
+            //    throw new InvalidOperationException("El servicio no existe.");
+            //}
 
-            if (servicio.disponibilidad <= 0)
-            {
-                // No hay disponibilidad de pasajes
-                throw new InvalidOperationException("No hay disponibilidad de pasajes para este servicio.");
-            }
+            //if (servicio.disponibilidad <= 0)
+            //{
+            //    // No hay disponibilidad de pasajes
+            //    throw new InvalidOperationException("No hay disponibilidad de pasajes para este servicio.");
+            //}
 
-            // Actualiza la disponibilidad en base a la cantidad de asientos de la unidad de transporte
-            servicio.disponibilidad--;
+            //// Actualiza la disponibilidad en base a la cantidad de asientos de la unidad de transporte
+            //servicio.disponibilidad--;
             _context.Servicios.Update(servicio);
             await _context.SaveChangesAsync();
         }
@@ -404,12 +404,16 @@ namespace ViajePlusBDAPI.Servicios
             var servicio = await _context.Servicios.FindAsync(reserva.id_servicio);
             if (servicio != null)
             {
-                servicio.disponibilidad++;
+                //servicio.disponibilidad++;
                 _context.Servicios.Update(servicio);
                 await _context.SaveChangesAsync();
             }
         }
 
+        public Task<int?> ObtenerDisponibilidadAntesReservaAsync(int idServicio)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public interface IServicioUsuarioService
