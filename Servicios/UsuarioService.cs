@@ -22,7 +22,7 @@ namespace ViajePlusBDAPI.Servicios
         // Busca un usuario por su dni en la BD
         public async Task<Usuario> ObtenerUsuarioPorDocumentoAsync(string documento)
         {
-            return await _context.Usuarios.Include(u => u.RolesUsuarios).FirstOrDefaultAsync(u => u.dni == documento);
+            return await _context.Usuarios.Include(u => u.RolesUsuarios).FirstOrDefaultAsync(u => u.id_dni == documento);
         }
 
         public async Task<List<Usuario>> ObtenerClientesAsync()
@@ -46,7 +46,7 @@ namespace ViajePlusBDAPI.Servicios
                 }
 
                 // Verifica si el usuario ya existe en la base de datos
-                var usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.dni == usuario.dni);
+                var usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.id_dni == usuario.id_dni);
 
                 if (usuarioExistente != null)
                 {
@@ -111,7 +111,7 @@ namespace ViajePlusBDAPI.Servicios
         {
             string dniStr = dni.ToString();
             // Verificar que el DNI del usuario a editar coincide con el DNI en el objeto usuario
-            if (dniStr != usuario.dni)
+            if (dniStr != usuario.id_dni)
             {
                 throw new ArgumentException("Los DNI no coinciden", nameof(dni));
             }
@@ -121,7 +121,7 @@ namespace ViajePlusBDAPI.Servicios
                 // Verificar si el usuario existe en la base de datos
                 var usuarioExistente = await _context.Usuarios
                     .Include(u => u.RolesUsuarios)
-                    .FirstOrDefaultAsync(u => u.dni == dniStr);
+                    .FirstOrDefaultAsync(u => u.id_dni == dniStr);
 
                 if (usuarioExistente == null)
                 {
@@ -166,7 +166,7 @@ namespace ViajePlusBDAPI.Servicios
         // Busca por dni en la BD, si se encuentra se elimina y si no se encuentra se lanza una excepcion 
         public async Task EliminarUsuarioAsync(string documento)
         {
-            var usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.dni == documento);
+            var usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.id_dni == documento);
 
             if (usuarioExistente == null)
             {

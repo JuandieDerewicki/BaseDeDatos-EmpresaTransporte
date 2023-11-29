@@ -310,7 +310,7 @@ namespace ViajePlusBDAPI.Servicios
         public async Task<Usuario?> ObtenerUsuarioAsync(string dniUsuario)
         {
             return await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.dni == dniUsuario);
+                .FirstOrDefaultAsync(u => u.id_dni == dniUsuario);
         }
 
         public async Task<int?> ObtenerDisponibilidadAsync(int idServicio)

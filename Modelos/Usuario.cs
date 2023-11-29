@@ -9,7 +9,7 @@ namespace ViajePlusBDAPI.Modelos
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [StringLength(20)]
-        public string dni { get; set; } // Clave Primaria 
+        public string id_dni { get; set; } // Clave Primaria 
 
         [Required]
         [StringLength(100)]

@@ -223,7 +223,7 @@ namespace ViajePlusBDAPI.Migrations
 
             modelBuilder.Entity("ViajePlusBDAPI.Modelos.Usuario", b =>
                 {
-                    b.Property<string>("dni")
+                    b.Property<string>("id_dni")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
@@ -260,7 +260,7 @@ namespace ViajePlusBDAPI.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.HasKey("dni");
+                    b.HasKey("id_dni");
 
                     b.HasIndex("id_rol");
 
