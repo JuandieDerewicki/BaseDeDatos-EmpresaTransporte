@@ -50,28 +50,11 @@ namespace ViajePlusBDAPI.Controladores
         //    return Ok(servicios);
         //}
 
-
-        //[HttpPost]
-        //public async Task<ActionResult<Servicio>> AgregarServicioAsync([FromBody] Servicio nuevoServicio)
-        //{
-        //    try
-        //    {
-        //        var servicioAgregado = await _servicioService.AgregarServicioAsync(nuevoServicio);
-        //        return servicioAgregado;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Cambiado para devolver más detalles sobre la excepción
-        //        return StatusCode(500, $"Error al agregar el servicio: {ex.Message}\n{ex.StackTrace}");
-        //    }
-        //}
-
         [HttpPost]
         public async Task<ActionResult<Servicio>> AgregarServicioAsync([FromBody] Servicio nuevoServicio)
         {
             try
             {
-                // ...
 
                 var itinerario = await _servicioService.ObtenerItinerarioAsync(nuevoServicio.id_itinerario ?? 0);
                 var unidadTransporte = await _servicioService.ObtenerUnidadTransporteAsync(nuevoServicio.id_unidadTransporte ?? 0);
@@ -90,8 +73,6 @@ namespace ViajePlusBDAPI.Controladores
                 nuevoServicio.UnidadTransporte = unidadTransporte;
 
                 var servicioAgregado = await _servicioService.AgregarServicioAsync(nuevoServicio);
-
-                // ...
 
                 return CreatedAtAction("ObtenerServicioPorId", new { id = servicioAgregado.id_servicio }, servicioAgregado);
             }

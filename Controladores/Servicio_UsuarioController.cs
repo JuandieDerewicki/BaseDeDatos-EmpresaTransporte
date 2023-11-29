@@ -72,7 +72,7 @@ namespace ViajePlusBDAPI.Controladores
         {
             try
             {
-                var nuevoServicioUsuario = await _servicioUsuarioService.AgregarServicioUsuarioYReservaAsync(servicioUsuario);
+                var nuevoServicioUsuario = await _servicioUsuarioService.ReservaPasajeAsync(servicioUsuario);
                 return CreatedAtAction(nameof(ObtenerServicioUsuarioPorId), new { id = nuevoServicioUsuario.id }, nuevoServicioUsuario);
             }
             catch (ArgumentNullException ex)
