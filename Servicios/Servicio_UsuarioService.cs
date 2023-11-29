@@ -196,11 +196,6 @@ namespace ViajePlusBDAPI.Servicios
                 costoPredeterminado = costoPredeterminado + (costoPredeterminado * 1.20); // Aumento del 20% para atención ejecutiva
             }
 
-            //string categoriaTransporte = "";
-            //if (servicioUsuario.Servicio != null && servicioUsuario.Servicio.UnidadTransporte != null)
-            //{
-                //categoriaTransporte = servicioUsuario.Servicio.UnidadTransporte.categoria?.Trim(); 
-                //categoriaTransporte = servicioUsuario.Servicio.UnidadTransporte.categoria;
             var servicio = _context.Servicios.Find(servicioUsuario.id_servicio);
             var categoriaTransporte = _context.UnidadesTransporte.Find(servicio.id_unidadTransporte);
             if (string.Compare(categoriaTransporte.categoria, "Cochecama", StringComparison.OrdinalIgnoreCase) == 0)
@@ -211,46 +206,12 @@ namespace ViajePlusBDAPI.Servicios
             {
                 costoPredeterminado = costoPredeterminado + (costoPredeterminado * 1.10);
             }
-            //}
-
-
-
-            // Aplicar el aumento por categoría de la unidad de transporte
-            //if (!string.IsNullOrEmpty(categoriaTransporte))
-            //{
-            //    if (categoriaTransporte == "Semicama")
-            //    {
-            //        costoPredeterminado = costoPredeterminado + (costoPredeterminado * 1.10); // Aumento del 10% para categoría semicama
-            //    }
-            //    else if (categoriaTransporte == "Cochecama")
-            //    {
-            //        costoPredeterminado = costoPredeterminado + (costoPredeterminado * 1.30); // Aumento del 30% para categoría cochecama
-            //    }
-            //}
-
-            //// Obtener la categoría de la unidad de transporte asociada al servicio
-            //string categoriaTransporte = servicioUsuario.Servicio.UnidadTransporte?.categoria ?? "";
-
-            //// Aplicar el aumento por categoría de la unidad de transporte
-            //switch (categoriaTransporte)
-            //{
-            //    case "Comun":
-            //        // No hay aumento
-            //        break;
-            //    case "Semicama":
-            //        costoPredeterminado *= 1.10; // Aumento del 10% para categoría semicama
-            //        break;
-            //    case "Cochecama":
-            //        costoPredeterminado *= 1.30; // Aumento del 30% para categoría cochecama
-            //        break;
-            //        // Puedes agregar más casos según las categorías que tengas
-            //}
-
+     
             // Verificar si hay un punto intermedio asociado
             if (servicioUsuario.PuntoIntermedio != null)
             {
                 // Hay un punto intermedio, restar el 10%
-                costoPredeterminado = costoPredeterminado + (costoPredeterminado * 0.90);
+                costoPredeterminado = costoPredeterminado * 0.90;
             }
 
             servicioUsuario.costo_final = costoPredeterminado;
