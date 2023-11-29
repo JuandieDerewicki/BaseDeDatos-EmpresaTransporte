@@ -170,7 +170,10 @@ namespace ViajePlusBDAPI.Migrations
                         .HasColumnType("float");
 
                     b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
                     b.Property<int?>("id_puntoIntermedio")
                         .HasColumnType("int");
@@ -178,6 +181,9 @@ namespace ViajePlusBDAPI.Migrations
                     b.Property<string>("tipo_atencion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("venta")
+                        .HasColumnType("bit");
 
                     b.HasKey("id_servicio", "dni_usuario");
 
@@ -283,11 +289,13 @@ namespace ViajePlusBDAPI.Migrations
                 {
                     b.HasOne("ViajePlusBDAPI.Modelos.Itinerario", "Itinerario")
                         .WithMany("Servicios")
-                        .HasForeignKey("id_itinerario");
+                        .HasForeignKey("id_itinerario")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ViajePlusBDAPI.Modelos.UnidadTransporte", "UnidadTransporte")
                         .WithMany("Servicios")
-                        .HasForeignKey("id_unidadTransporte");
+                        .HasForeignKey("id_unidadTransporte")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Itinerario");
 
@@ -299,7 +307,7 @@ namespace ViajePlusBDAPI.Migrations
                     b.HasOne("ViajePlusBDAPI.Modelos.Usuario", "Usuario")
                         .WithMany("Servicio_Usuarios")
                         .HasForeignKey("dni_usuario")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ViajePlusBDAPI.Modelos.PuntoIntermedio", "PuntoIntermedio")
