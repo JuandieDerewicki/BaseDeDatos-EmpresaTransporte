@@ -166,6 +166,9 @@ namespace ViajePlusBDAPI.Migrations
                     b.Property<string>("dni_usuario")
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<int?>("id_puntoIntermedio")
+                        .HasColumnType("int");
+
                     b.Property<double?>("costo_final")
                         .HasColumnType("float");
 
@@ -175,9 +178,6 @@ namespace ViajePlusBDAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int?>("id_puntoIntermedio")
-                        .HasColumnType("int");
-
                     b.Property<string>("tipo_atencion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -185,13 +185,12 @@ namespace ViajePlusBDAPI.Migrations
                     b.Property<bool>("venta")
                         .HasColumnType("bit");
 
-                    b.HasKey("id_servicio", "dni_usuario");
+                    b.HasKey("id_servicio", "dni_usuario", "id_puntoIntermedio");
 
                     b.HasIndex("dni_usuario");
 
                     b.HasIndex("id_puntoIntermedio")
-                        .IsUnique()
-                        .HasFilter("[id_puntoIntermedio] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Servicios_Usuarios");
                 });
@@ -313,7 +312,8 @@ namespace ViajePlusBDAPI.Migrations
                     b.HasOne("ViajePlusBDAPI.Modelos.PuntoIntermedio", "PuntoIntermedio")
                         .WithOne()
                         .HasForeignKey("ViajePlusBDAPI.Modelos.Servicio_Usuario", "id_puntoIntermedio")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("ViajePlusBDAPI.Modelos.Servicio", "Servicio")
                         .WithMany("Servicio_Usuarios")
