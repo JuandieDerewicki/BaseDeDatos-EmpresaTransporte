@@ -44,6 +44,20 @@ namespace ViajePlusBDAPI.Controladores
             return Ok(usuario);
         }
 
+        [HttpGet("clientes")]
+        public async Task<ActionResult<List<Usuario>>> ObtenerClientes()
+        {
+            var clientes = await _usuariosService.ObtenerClientesAsync();
+            return Ok(clientes);
+        }
+
+        [HttpGet("administradores")]
+        public async Task<ActionResult<List<Usuario>>> ObtenerAdministradores()
+        {
+            var administradores = await _usuariosService.ObtenerAdministradoresAsync();
+            return Ok(administradores);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Usuario>> RegistrarUsuarioAsync(Usuario usuario)
         {

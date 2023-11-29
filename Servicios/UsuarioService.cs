@@ -25,6 +25,15 @@ namespace ViajePlusBDAPI.Servicios
             return await _context.Usuarios.Include(u => u.RolesUsuarios).FirstOrDefaultAsync(u => u.dni == documento);
         }
 
+        public async Task<List<Usuario>> ObtenerClientesAsync()
+        {
+            return await ObtenerUsuariosPorRolAsync("Cliente");
+        }
+
+        public async Task<List<Usuario>> ObtenerAdministradoresAsync()
+        {
+            return await ObtenerUsuariosPorRolAsync("Administrador");
+        }
 
         public async Task<Usuario> RegistrarUsuarioAsync(Usuario usuario, string tipoUsuario)
         {
@@ -167,12 +176,25 @@ namespace ViajePlusBDAPI.Servicios
             _context.Usuarios.Remove(usuarioExistente);
             await _context.SaveChangesAsync();
         }
+
+
+        public async Task<List<Usuario>> ObtenerUsuariosPorRolAsync(string rolNombre)
+        {
+            return await _context.Usuarios
+                .Where(u => u.RolesUsuarios.tipo_rol == rolNombre)
+                .ToListAsync();
+        }
+
     }
 
     public interface IUsuarioService
     {
         Task<List<Usuario>> ObtenerTodosUsuariosAsync();
         Task<Usuario> ObtenerUsuarioPorDocumentoAsync(string documento);
+
+        Task<List<Usuario>> ObtenerClientesAsync();
+        Task<List<Usuario>> ObtenerAdministradoresAsync();
+
         Task EliminarUsuarioAsync(string documento);
         Task<Usuario> RegistrarUsuarioAsync(Usuario usuario, string tipoUsuario);
         Task<Usuario> EditarUsuarioAsync(int dni, Usuario usuario);

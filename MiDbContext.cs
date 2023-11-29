@@ -56,8 +56,10 @@ namespace ViajePlusBDAPI
             // .OnDelete(DeleteBehavior.Cascade);
 
             // Definir la relación M:N entre Servicio y Usuario a través de Servicio_Usuario
+            //modelBuilder.Entity<Servicio_Usuario>()
+            //    .HasKey(su => new { su.id_servicio, su.dni_usuario }); // DEFINICION DE CLAVE COMPUESTA
             modelBuilder.Entity<Servicio_Usuario>()
-                .HasKey(su => new { su.id_servicio, su.dni_usuario });
+                .HasKey(su => new { su.id_servicio, su.dni_usuario, su.id_puntoIntermedio }); // DEFINICION DE CLAVE COMPUESTA
 
             modelBuilder.Entity<Servicio_Usuario>()
                 .HasOne(su => su.Servicio)

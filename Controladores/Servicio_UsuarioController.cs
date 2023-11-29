@@ -42,30 +42,56 @@ namespace ViajePlusBDAPI.Controladores
             return Ok(serviciosUsuario);
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult<Servicio_Usuario>> AgregarServicioUsuario(Servicio_Usuario servicioUsuario)
-        //{
-        //    var nuevoServicioUsuario = await _servicioUsuarioService.AgregarServicioUsuarioAsync(servicioUsuario);
-        //    return CreatedAtAction(nameof(ObtenerServicioUsuarioPorId), new { id = nuevoServicioUsuario.id }, nuevoServicioUsuario);
-        //}
+        [HttpGet("usuario/{idservicio}")]
+        public async Task<ActionResult<List<Servicio_Usuario>>> ObtenerServiciosUsuarioPorServicio(int idservicio)
+        {
+            var serviciosUsuario = await _servicioUsuarioService.ObtenerServiciosUsuarioPorServicioAsync(idservicio);
+            return Ok(serviciosUsuario);
+        }
 
-        //[HttpPost("agregar-servicio-usuario-y-reserva")]
-        //public async Task<IActionResult> AgregarServicioUsuarioYReserva([FromBody] Servicio_Usuario servicioUsuario)
-        //{
-        //    try
-        //    {
-        //        var nuevoServicioUsuario = await _servicioUsuarioService.AgregarServicioUsuarioYReservaAsync(servicioUsuario);
-        //        return CreatedAtAction(nameof(ObtenerServicioUsuarioPorId), new { id = nuevoServicioUsuario.id }, nuevoServicioUsuario);
-        //    }
-        //    catch (InvalidOperationException ex)
-        //    {
-        //        return BadRequest(new { message = ex.Message });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new { message = "Ocurrió un error interno. Por favor, inténtelo de nuevo más tarde." });
-        //    }
-        //}
+
+        [HttpGet("ventas")]
+        public async Task<ActionResult<List<Servicio_Usuario>>> ObtenerServiciosVentaTrue()
+        {
+            var serviciosVentaTrue = await _servicioUsuarioService.ObtenerServiciosVentaTrueAsync();
+            return Ok(serviciosVentaTrue);
+        }
+
+        [HttpGet("reservas")]
+        public async Task<ActionResult<List<Servicio_Usuario>>> ObtenerServiciosReservados()
+        {
+            var serviciosReservados = await _servicioUsuarioService.ObtenerServiciosReservadosAsync();
+            return Ok(serviciosReservados);
+        }
+
+        [HttpGet("pasajesVendidos/cama")]
+        public async Task<ActionResult<List<Servicio_Usuario>>> ObtenerPasajesVendidosCama()
+        {
+            var pasajesVendidosCama = await _servicioUsuarioService.ObtenerPasajesVendidosCamaAsync();
+            return Ok(pasajesVendidosCama);
+        }
+
+        [HttpGet("pasajesVendidos/semicama")]
+        public async Task<ActionResult<List<Servicio_Usuario>>> ObtenerPasajesVendidosSemicama()
+        {
+            var pasajesVendidosSemicama = await _servicioUsuarioService.ObtenerPasajesVendidosSemicamaAsync();
+            return Ok(pasajesVendidosSemicama);
+        }
+
+        [HttpGet("pasajesVendidos/comun")]
+        public async Task<ActionResult<List<Servicio_Usuario>>> ObtenerPasajesVendidosComun()
+        {
+            var pasajesVendidosComun = await _servicioUsuarioService.ObtenerPasajesVendidosComunAsync();
+            return Ok(pasajesVendidosComun);
+        }
+
+        [HttpGet("pasajesVendidos/conItinerario")]
+        public async Task<ActionResult<List<Servicio_Usuario>>> ObtenerPasajesVendidosConItinerario()
+        {
+            var pasajesVendidosConItinerario = await _servicioUsuarioService.ObtenerPasajesVendidosConItinerarioAsync();
+            return Ok(pasajesVendidosConItinerario);
+        }
+
 
         [HttpPost("agregar-servicio-usuario-y-reserva")]
         public async Task<IActionResult> AgregarServicioUsuarioYReserva([FromBody] Servicio_Usuario servicioUsuario)
@@ -77,11 +103,11 @@ namespace ViajePlusBDAPI.Controladores
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest(new { message = $"Error al agregar el servicioUsuario: {ex.ParamName} - {ex.Message}" });
+                return BadRequest(new { message = $"Error al agregar el servicioUsuario: {ex.ParamName} - {ex.Message} {ex.InnerException}" });
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(new { message = $"Error al agregar el servicioUsuario: {ex.Message}" });
+                return BadRequest(new { message = $"Error al agregar el servicioUsuario: {ex.Message} {ex.InnerException}" });
             }
             catch (Exception)
             {
@@ -112,26 +138,6 @@ namespace ViajePlusBDAPI.Controladores
             return NoContent();
         }
 
-        //[HttpGet("verificar-disponibilidad/{idServicio}")]
-        //public async Task<IActionResult> VerificarDisponibilidad(int idServicio)
-        //{
-        //    var disponibilidad = await _servicioUsuarioService.VerificarDisponibilidadAsync(idServicio);
-        //    return Ok(disponibilidad);
-        //}
-
-        //[HttpPost("realizar-reserva")]
-        //public async Task<IActionResult> RealizarReserva([FromBody] Servicio_Usuario reserva)
-        //{
-        //    try
-        //    {
-        //        var nuevaReserva = await _servicioUsuarioService.RealizarReservaAsync(reserva);
-        //        return Ok(nuevaReserva);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new { message = ex.Message });
-        //    }
-        //}
 
         [HttpDelete("cancelar-reserva/{reservaId}")]
         public async Task<IActionResult> CancelarReserva(int reservaId)

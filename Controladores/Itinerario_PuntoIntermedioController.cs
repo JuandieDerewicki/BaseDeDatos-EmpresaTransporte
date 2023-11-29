@@ -70,6 +70,21 @@ namespace ViajePlusBDAPI.Controladores
             }
         }
 
+
+        [HttpGet("puntos-intermedios/{idItinerario}")]
+        public async Task<ActionResult<List<Itinerario_PuntoIntermedio>>> ObtenerPuntosIntermediosPorItinerario(int idItinerario)
+        {
+            try
+            {
+                var puntosIntermedios = await _itinerarioPuntoIntermedioService.ObtenerPuntosIntermediosPorItinerarioAsync(idItinerario);
+                return Ok(puntosIntermedios);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al obtener puntos intermedios: {ex.Message}");
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<Itinerario_PuntoIntermedio>> AgregarItinerarioPuntoIntermedioAsync(Itinerario_PuntoIntermedio itinerarioPuntoIntermedio)
         {

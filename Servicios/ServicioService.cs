@@ -22,50 +22,6 @@ namespace ViajePlusBDAPI.Servicios
             return await _context.Servicios.FirstOrDefaultAsync(s => s.id_servicio == id);
         }
 
-        //public async Task<Servicio> AgregarServicioAsync(Servicio servicio)
-        //{
-        //    try
-        //    {
-        //        // Verifica si existe el itinerario y la unidad de transporte
-        //        if (servicio.id_itinerario.HasValue)
-        //        {
-        //            var itinerario = await ObtenerItinerarioAsync(servicio.id_itinerario.Value);
-
-        //            if (itinerario == null)
-        //            {
-        //                throw new Exception("El itinerario no existe");
-        //            }
-
-        //            servicio.Itinerario = itinerario;
-        //        }
-
-        //        if (servicio.id_unidadTransporte.HasValue)
-        //        {
-        //            var unidadTransporte = await ObtenerUnidadTransporteAsync(servicio.id_unidadTransporte.Value);
-
-        //            if (unidadTransporte == null)
-        //            {
-        //                throw new Exception("La unidad de transporte no existe");
-        //            }
-
-        //            servicio.UnidadTransporte = unidadTransporte;
-        //        }
-
-        //        // Agrega el servicio al contexto
-        //        _context.Servicios.Add(servicio);
-
-        //        // Guarda los cambios en la base de datos
-        //        await _context.SaveChangesAsync();
-
-        //        return servicio;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //        throw; // Lanza la excepción para que se maneje en el controlador
-        //    }
-        //}
-
         public async Task<Servicio> AgregarServicioAsync(Servicio servicio)
         {
             try

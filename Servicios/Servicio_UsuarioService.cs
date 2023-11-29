@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using ViajePlusBDAPI.Modelos;
 
 namespace ViajePlusBDAPI.Servicios
@@ -27,6 +28,53 @@ namespace ViajePlusBDAPI.Servicios
             return await _context.Servicios_Usuarios.Where(su => su.dni_usuario == dniUsuario).ToListAsync();
         }
 
+        public async Task<List<Servicio_Usuario>> ObtenerServiciosUsuarioPorServicioAsync(int idservicio)
+        {
+            return await _context.Servicios_Usuarios.Where(su => su.id_servicio == idservicio).ToListAsync();
+        }
+
+        public async Task<List<Servicio_Usuario>> ObtenerServiciosVentaTrueAsync()
+        {
+            return await _context.Servicios_Usuarios.Where(su => su.venta).ToListAsync();
+        }
+
+        public async Task<List<Servicio_Usuario>> ObtenerServiciosReservadosAsync()
+        {
+            return await _context.Servicios_Usuarios.Where(su => !su.venta).ToListAsync();
+        }
+
+        // ESTADISTICAS 
+        public async Task<List<Servicio_Usuario>> ObtenerPasajesVendidosCamaAsync()
+        {
+            return await _context.Servicios_Usuarios
+                .Where(su => su.venta && su.Servicio.UnidadTransporte.categoria == "Cochecama")
+                .ToListAsync();
+        }
+
+        public async Task<List<Servicio_Usuario>> ObtenerPasajesVendidosSemicamaAsync()
+        {
+            return await _context.Servicios_Usuarios
+                .Where(su => su.venta && su.Servicio.UnidadTransporte.categoria == "Semicama")
+                .ToListAsync();
+        }
+
+        public async Task<List<Servicio_Usuario>> ObtenerPasajesVendidosComunAsync()
+        {
+            return await _context.Servicios_Usuarios
+                .Where(su => su.venta && su.Servicio.UnidadTransporte.categoria == "Comun")
+                .ToListAsync();
+        }
+
+        public async Task<List<Servicio_Usuario>> ObtenerPasajesVendidosConItinerarioAsync()
+        {
+            return await _context.Servicios_Usuarios
+                .Include(su => su.Servicio)
+                .ThenInclude(s => s.Itinerario)
+                .Where(su => su.venta == false)
+                .ToListAsync();
+        }
+
+
         public async Task<Servicio_Usuario> EditarServicioUsuarioAsync(int id, Servicio_Usuario servicioUsuario)
         {
             var servicioUsuarioExistente = await _context.Servicios_Usuarios.FirstOrDefaultAsync(su => su.id == id);
@@ -37,6 +85,7 @@ namespace ViajePlusBDAPI.Servicios
             }
 
             // Realizar las actualizaciones necesarias en servicioUsuarioExistente con los datos de servicioUsuario
+            servicioUsuarioExistente.venta = servicioUsuario.venta;
 
             await _context.SaveChangesAsync();
             return servicioUsuarioExistente;
@@ -55,112 +104,6 @@ namespace ViajePlusBDAPI.Servicios
             await _context.SaveChangesAsync();
         }
 
-
-        //public async Task<Servicio_Usuario> AgregarServicioUsuarioYReservaAsync(Servicio_Usuario servicioUsuario)
-        //{
-        //    int? disponibilidadAntes = null;
-        //    int? disponibilidadDespues = null;
-        //    double? costoFinalAntes = null;
-        //    double? costoFinalDespues = null;
-
-        //    try
-        //    {
-        //        if (servicioUsuario == null)
-        //        {
-        //            throw new ArgumentNullException(nameof(servicioUsuario), "El servicioUsuario no puede ser nulo.");
-        //        }
-
-        //        // Verificar si existe el usuario
-        //        if (string.IsNullOrEmpty(servicioUsuario.dni_usuario))
-        //        {
-        //            throw new Exception("El dni_usuario no puede estar vacío.");
-        //        }
-
-        //        var usuario = await ObtenerUsuarioAsync(servicioUsuario.dni_usuario);
-
-        //        if (usuario == null)
-        //        {
-        //            throw new Exception("El usuario no existe");
-        //        }
-
-        //        servicioUsuario.Usuario = usuario;
-
-        //        // Obtener la disponibilidad antes de la reserva
-        //        //disponibilidadAntes = await ObtenerDisponibilidadAntesReservaAsync(servicioUsuario.id_servicio ?? 0);
-
-        //        // Obtener el costo final antes de la reserva
-        //        costoFinalAntes = await ObtenerCostoFinalAntesReservaAsync(servicioUsuario.id_servicio ?? 0);
-
-        //        // Obtener el servicio asociado
-        //        var servicio = await ObtenerServicioAsync(servicioUsuario.id_servicio ?? 0);
-
-        //        if (servicio == null)
-        //        {
-        //            throw new Exception("El servicio no existe");
-        //        }
-
-        //        servicioUsuario.Servicio = servicio;
-
-        //        // Obtener el punto intermedio asociado
-        //        if (servicioUsuario.id_puntoIntermedio.HasValue)
-        //        {
-        //            var puntoIntermedio = await ObtenerPuntoIntermedioAsync(servicioUsuario.id_puntoIntermedio.Value);
-
-        //            if (puntoIntermedio == null)
-        //            {
-        //                throw new Exception("El punto intermedio no existe");
-        //            }
-
-        //            servicioUsuario.PuntoIntermedio = puntoIntermedio;
-        //        }
-
-        //        // Calcular el costo final
-        //        servicioUsuario.CalcularCostoFinal(servicioUsuario.Servicio);
-
-        //        // Verificar la disponibilidad del servicio si es necesario
-        //        if (servicioUsuario.id_servicio.HasValue)
-        //        {
-        //            // Considera agregar una verificación más detallada de la disponibilidad aquí según tu lógica de negocio
-        //            await VerificarDisponibilidadAsync(servicioUsuario.id_servicio.Value);
-
-        //            // Obtener la disponibilidad después de la reserva
-        //            disponibilidadDespues = await ObtenerDisponibilidadDespuesReservaAsync(servicioUsuario.id_servicio ?? 0);
-
-        //            // Obtener el costo final después de la reserva
-        //            costoFinalDespues = await ObtenerCostoFinalDespuesReservaAsync(servicioUsuario.id_servicio ?? 0);
-        //        }
-
-        //        // Agregar el servicioUsuario al contexto y guardar los cambios en la base de datos
-        //        _context.Servicios_Usuarios.Add(servicioUsuario);
-        //        await _context.SaveChangesAsync();
-
-        //        // Incluir disponibilidad y costo final en la respuesta
-        //        var response = new
-        //        {
-        //            id = servicioUsuario.id,
-        //            dni_usuario = servicioUsuario.dni_usuario,
-        //            id_servicio = servicioUsuario.id_servicio,
-        //            id_puntoIntermedio = servicioUsuario.id_puntoIntermedio,
-        //            tipo_atencion = servicioUsuario.tipo_atencion,
-        //            costo_final = servicioUsuario.costo_final,
-        //            disponibilidad_antes = disponibilidadAntes,
-        //            disponibilidad_despues = disponibilidadDespues,
-        //            costo_final_antes = costoFinalAntes,
-        //            costo_final_despues = costoFinalDespues,
-        //            // Otros campos que desees incluir en la respuesta
-        //        };
-
-        //        return servicioUsuario;
-        //    }
-        //    catch (ArgumentNullException ex)
-        //    {
-        //        throw new InvalidOperationException($"Error al agregar el servicioUsuario: {ex.ParamName} - {ex.Message}", ex);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new InvalidOperationException($"Error al agregar el servicioUsuario: {ex.Message}", ex);
-        //    }
-        //}
 
         public async Task<Servicio_Usuario> ReservaPasajeAsync(Servicio_Usuario servicioUsuario)
         {
@@ -215,47 +158,29 @@ namespace ViajePlusBDAPI.Servicios
                 // Obtener la disponibilidad antes de la reserva
                 int? disponibilidadAntes = await ObtenerDisponibilidadAsync(servicio.id_servicio);
 
-                // Calcular el costo final antes de la reserva
-                double costoFinalAntes = await ObtenerCostoFinalAsync(servicioUsuario);
+                // Verificar que no sea el mismo día de la partida antes de la reserva
+                await VerificarReservaMismoDiaAsync(servicio.id_itinerario ?? 0);
 
-                // Calcular el costo final
-                ObtenerCostoFinalAsync(servicioUsuario); /////// CAMBIAR ESTA PARTE
+                // Calcular el costo final antes de la reserva
+                double costoFinal = await ObtenerCostoFinalAsync(servicioUsuario);
+
+                // Asignar el costo final calculado al servicioUsuario
+                servicioUsuario.costo_final = costoFinal;
 
                 // Verificar la disponibilidad después de la reserva
                 int? disponibilidadDespues = await ObtenerDisponibilidadAsync(servicio.id_servicio);
-
-                // Obtener el costo final después de la reserva
-                double costoFinalDespues = await ObtenerCostoFinalAsync(servicioUsuario);
 
                 // Agregar el servicioUsuario al contexto y guardar los cambios en la base de datos
                 _context.Servicios_Usuarios.Add(servicioUsuario);
                 await _context.SaveChangesAsync();
 
-                // Incluir disponibilidad y costo final en la respuesta
-                var response = new
-                {
-                    id = servicioUsuario.id,
-                    dni_usuario = servicioUsuario.dni_usuario,
-                    id_servicio = servicioUsuario.id_servicio,
-                    id_puntoIntermedio = servicioUsuario.id_puntoIntermedio,
-                    tipo_atencion = servicioUsuario.tipo_atencion,
-                    costo_final = servicioUsuario.costo_final,
-                    disponibilidad_antes = disponibilidadAntes,
-                    disponibilidad_despues = disponibilidadDespues,
-                    costo_final_antes = costoFinalAntes,
-                    costo_final_despues = costoFinalDespues,
-                    // Otros campos que desees incluir en la respuesta
-                };
-
                 return servicioUsuario;
                 // Puedes devolver la respuesta o simplemente no devolver nada (depende de tu diseño)
             }
-            catch (ArgumentNullException ex)
-            {
-                throw new InvalidOperationException($"Error al reservar el pasaje: {ex.ParamName} - {ex.Message}", ex);
-            }
             catch (Exception ex)
             {
+                Console.WriteLine($"Excepción interna: {ex.InnerException?.Message}");
+                Console.WriteLine($"StackTrace interna: {ex.InnerException?.StackTrace}");
                 throw new InvalidOperationException($"Error al reservar el pasaje: {ex.Message}", ex);
             }
         }
@@ -268,39 +193,88 @@ namespace ViajePlusBDAPI.Servicios
             // Aplicar el aumento por tipo de atención
             if (servicioUsuario.tipo_atencion == "Ejecutivo")
             {
-                costoPredeterminado *= 1.20; // Aumento del 20% para atención ejecutiva
+                costoPredeterminado = costoPredeterminado + (costoPredeterminado * 1.20); // Aumento del 20% para atención ejecutiva
             }
 
-            // Obtener la categoría de la unidad de transporte asociada al servicio
-            string categoriaTransporte = servicioUsuario.Servicio.UnidadTransporte?.categoria ?? "";
+            //string categoriaTransporte = "";
+            //if (servicioUsuario.Servicio != null && servicioUsuario.Servicio.UnidadTransporte != null)
+            //{
+                //categoriaTransporte = servicioUsuario.Servicio.UnidadTransporte.categoria?.Trim(); 
+                //categoriaTransporte = servicioUsuario.Servicio.UnidadTransporte.categoria;
+            var servicio = _context.Servicios.Find(servicioUsuario.id_servicio);
+            var categoriaTransporte = _context.UnidadesTransporte.Find(servicio.id_unidadTransporte);
+            if (string.Compare(categoriaTransporte.categoria, "Cochecama", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                costoPredeterminado = costoPredeterminado + (costoPredeterminado * 1.30);
+            }
+            else if (string.Compare(categoriaTransporte.categoria, "Semicama", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                costoPredeterminado = costoPredeterminado + (costoPredeterminado * 1.10);
+            }
+            //}
+
+
 
             // Aplicar el aumento por categoría de la unidad de transporte
-            switch (categoriaTransporte)
-            {
-                case "Comun":
-                    // No hay aumento
-                    break;
-                case "Semicama":
-                    costoPredeterminado *= 1.10; // Aumento del 10% para categoría semicama
-                    break;
-                case "Cochecama":
-                    costoPredeterminado *= 1.30; // Aumento del 30% para categoría cochecama
-                    break;
-                    // Puedes agregar más casos según las categorías que tengas
-            }
+            //if (!string.IsNullOrEmpty(categoriaTransporte))
+            //{
+            //    if (categoriaTransporte == "Semicama")
+            //    {
+            //        costoPredeterminado = costoPredeterminado + (costoPredeterminado * 1.10); // Aumento del 10% para categoría semicama
+            //    }
+            //    else if (categoriaTransporte == "Cochecama")
+            //    {
+            //        costoPredeterminado = costoPredeterminado + (costoPredeterminado * 1.30); // Aumento del 30% para categoría cochecama
+            //    }
+            //}
+
+            //// Obtener la categoría de la unidad de transporte asociada al servicio
+            //string categoriaTransporte = servicioUsuario.Servicio.UnidadTransporte?.categoria ?? "";
+
+            //// Aplicar el aumento por categoría de la unidad de transporte
+            //switch (categoriaTransporte)
+            //{
+            //    case "Comun":
+            //        // No hay aumento
+            //        break;
+            //    case "Semicama":
+            //        costoPredeterminado *= 1.10; // Aumento del 10% para categoría semicama
+            //        break;
+            //    case "Cochecama":
+            //        costoPredeterminado *= 1.30; // Aumento del 30% para categoría cochecama
+            //        break;
+            //        // Puedes agregar más casos según las categorías que tengas
+            //}
 
             // Verificar si hay un punto intermedio asociado
-            if (servicioUsuario.PuntoIntermedio == null)
+            if (servicioUsuario.PuntoIntermedio != null)
             {
-                // No hay punto intermedio, servicio completo, no hay descuento
-            }
-            else
-            {
-                // Hay un punto intermedio, se aplica un descuento del 10%
-                costoPredeterminado *= 0.90;
+                // Hay un punto intermedio, restar el 10%
+                costoPredeterminado = costoPredeterminado + (costoPredeterminado * 0.90);
             }
 
-            return costoPredeterminado;
+            servicioUsuario.costo_final = costoPredeterminado;
+            return servicioUsuario.costo_final ?? 0;
+        }
+
+        private async Task VerificarReservaMismoDiaAsync(int idItinerario)
+        {
+            // Obtener la fecha de partida del itinerario
+            var fechaPartidaItinerario = await _context.Itinerarios
+                .Where(i => i.id_itinerario == idItinerario)
+                .Select(i => i.fecha_partida)
+                .FirstOrDefaultAsync();
+
+            if (fechaPartidaItinerario == null || !DateTime.TryParseExact(fechaPartidaItinerario, "MM-dd-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var fechaPartida))
+            {
+                throw new InvalidOperationException("No se puede verificar la reserva en el mismo día. Error al obtener la fecha de partida del itinerario.");
+            }
+
+            // Verificar si la reserva es en el mismo día que la fecha de partida
+            if (fechaPartida.Date == DateTime.Now.Date)
+            {
+                throw new InvalidOperationException("No se puede realizar la reserva en el mismo día de la partida del itinerario.");
+            }
         }
 
         // Metodos para obtenciones
@@ -381,6 +355,9 @@ namespace ViajePlusBDAPI.Servicios
                 throw new InvalidOperationException("La reserva no existe.");
             }
 
+            // Verificar si se puede cancelar la reserva en el mismo día
+            await VerificarReservaMismoDiaAsync(reserva.id_servicio ?? 0);
+
             // Elimina la reserva de la base de datos
             _context.Servicios_Usuarios.Remove(reserva);
             await _context.SaveChangesAsync();
@@ -389,11 +366,12 @@ namespace ViajePlusBDAPI.Servicios
             var servicio = await _context.Servicios.FindAsync(reserva.id_servicio);
             if (servicio != null)
             {
-                //servicio.disponibilidad++;
                 _context.Servicios.Update(servicio);
                 await _context.SaveChangesAsync();
             }
         }
+
+
     }
 
     public interface IServicioUsuarioService
@@ -401,10 +379,21 @@ namespace ViajePlusBDAPI.Servicios
         Task<List<Servicio_Usuario>> ObtenerTodosServiciosUsuariosAsync();
         Task<Servicio_Usuario> ObtenerServicioUsuarioPorIdAsync(int id);
         Task<List<Servicio_Usuario>> ObtenerServiciosUsuarioPorDniAsync(string dniUsuario);
+        Task<List<Servicio_Usuario>> ObtenerServiciosUsuarioPorServicioAsync(int idservicio);
+        Task<List<Servicio_Usuario>> ObtenerServiciosVentaTrueAsync();
+        Task<List<Servicio_Usuario>> ObtenerServiciosReservadosAsync();
+        // ESTADISTICAS
+        Task<List<Servicio_Usuario>> ObtenerPasajesVendidosCamaAsync();
+        Task<List<Servicio_Usuario>> ObtenerPasajesVendidosSemicamaAsync();
+
+        Task<List<Servicio_Usuario>> ObtenerPasajesVendidosComunAsync();
+        Task<List<Servicio_Usuario>> ObtenerPasajesVendidosConItinerarioAsync();
+
+
+        // ESTADISTICAS
         Task<Servicio_Usuario> EditarServicioUsuarioAsync(int id, Servicio_Usuario servicioUsuario);
         Task EliminarServicioUsuarioAsync(int id);
         Task CancelarReservaAsync(int reservaId);
-        //Task<Servicio_Usuario> AgregarServicioUsuarioYReservaAsync(Servicio_Usuario servicioUsuario);
         Task<Servicio_Usuario> ReservaPasajeAsync(Servicio_Usuario servicioUsuario);
         Task<Usuario?> ObtenerUsuarioAsync(string dniUsuario);
         Task<Servicio?> ObtenerServicioAsync(int idServicio);

@@ -32,15 +32,41 @@ namespace ViajePlusBDAPI.Servicios
         public async Task<List<Itinerario_PuntoIntermedio>> ObtenerItinerariosPuntoIntermedioPorCiudadOrigenYDestinoAsync(string ciudadOrigen, string ciudadDestino)
         {
             return await _context.Itinerarios_PuntosIntermedios
-                .Where(ipi => ipi.PuntoIntermedio.nombre_ciudad == ciudadOrigen || ipi.PuntoIntermedio.nombre_ciudad == ciudadDestino)
+                .Where(ipi => ipi.Itinerario.ciudad_origen == ciudadOrigen || ipi.Itinerario.ciudad_destino == ciudadDestino)
+                .ToListAsync();
+        }
+
+        public async Task<List<Itinerario_PuntoIntermedio>> ObtenerPuntosIntermediosPorItinerarioAsync(int idItinerario)
+        {
+            return await _context.Itinerarios_PuntosIntermedios
+                .Where(ipi => ipi.id_itinerario == idItinerario)
                 .ToListAsync();
         }
 
         public async Task<Itinerario_PuntoIntermedio> AgregarItinerarioPuntoIntermedioAsync(Itinerario_PuntoIntermedio itinerarioPuntoIntermedio)
         {
+            // Verificar si existen los Itinerario y PuntoIntermedio correspondientes
+            var itinerarioExistente = await _context.Itinerarios.FindAsync(itinerarioPuntoIntermedio.id_itinerario);
+            var puntoIntermedioExistente = await _context.PuntosIntermedios.FindAsync(itinerarioPuntoIntermedio.id_puntoIntermedio);
+
+            if (itinerarioExistente == null || puntoIntermedioExistente == null)
+            {
+                // Uno o ambos no existen, manejar el error según sea necesario
+                throw new Exception("El Itinerario o PuntoIntermedio no existe.");
+            }
+
+            // Asignar las referencias de navegación
+            itinerarioPuntoIntermedio.Itinerario = itinerarioExistente;
+            itinerarioPuntoIntermedio.PuntoIntermedio = puntoIntermedioExistente;
+
+            // Agregar y guardar cambios
             _context.Itinerarios_PuntosIntermedios.Add(itinerarioPuntoIntermedio);
             await _context.SaveChangesAsync();
+
             return itinerarioPuntoIntermedio;
+            //_context.Itinerarios_PuntosIntermedios.Add(itinerarioPuntoIntermedio);
+            //await _context.SaveChangesAsync();
+            //return itinerarioPuntoIntermedio;
         }
 
         public async Task<Itinerario_PuntoIntermedio> EditarItinerarioPuntoIntermedioAsync(int id, Itinerario_PuntoIntermedio itinerarioPuntoIntermedio)
@@ -82,6 +108,7 @@ namespace ViajePlusBDAPI.Servicios
         Task<Itinerario_PuntoIntermedio> ObtenerItinerarioPuntoIntermedioPorIdAsync(int id);
         Task<List<Itinerario_PuntoIntermedio>> ObtenerItinerariosPuntoIntermedioPorCiudadAsync(string ciudad);
         Task<List<Itinerario_PuntoIntermedio>> ObtenerItinerariosPuntoIntermedioPorCiudadOrigenYDestinoAsync(string ciudadOrigen, string ciudadDestino);
+        Task<List<Itinerario_PuntoIntermedio>> ObtenerPuntosIntermediosPorItinerarioAsync(int idItinerario); 
         Task<Itinerario_PuntoIntermedio> AgregarItinerarioPuntoIntermedioAsync(Itinerario_PuntoIntermedio itinerarioPuntoIntermedio);
         Task<Itinerario_PuntoIntermedio> EditarItinerarioPuntoIntermedioAsync(int id, Itinerario_PuntoIntermedio itinerarioPuntoIntermedio);
         Task EliminarItinerarioPuntoIntermedioAsync(int id);
