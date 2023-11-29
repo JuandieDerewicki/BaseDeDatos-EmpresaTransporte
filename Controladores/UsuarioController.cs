@@ -121,7 +121,7 @@ namespace ViajePlusBDAPI.Controladores
         {
             string dniStr = dni.ToString();
 
-            if (dniStr != usuario.dni)
+            if (dniStr != usuario.dni_usuario)
             {
                 return BadRequest("Los DNI no coinciden");
             }
